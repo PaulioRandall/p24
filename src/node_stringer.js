@@ -1,18 +1,18 @@
-export const stringifyNodeAsHtml = (node) => {
+export const stringifyInstancePropsAsHtml = (node) => {
 	let s = `<` + node.name
 
 	if (node?.props?.const) {
-		s += stringifyHtmlProps('const', 'bind:', node.props.const)
+		s += stringifyHtmlIstanceProps('const', 'bind:', node.props.const)
 	}
 
 	if (node?.props?.let) {
-		s += stringifyHtmlProps('let', '', node.props.let)
+		s += stringifyHtmlIstanceProps('let', '', node.props.let)
 	}
 
 	return s + ` />`
 }
 
-const stringifyHtmlProps = (qualifier, prefix, props) => {
+const stringifyHtmlIstanceProps = (qualifier, prefix, props) => {
 	let s = ''
 
 	for (const name in props) {
@@ -32,40 +32,28 @@ const stringifyHtmlValue = (v) => {
 	}
 }
 
-export const stringifyNodeInstancePropsAsJs = (props) => {
+export const stringifyInstancePropsAsJs = (props) => {
 	let s = ''
 
 	if (props?.const) {
 		s += stringifyJsInstanceProps('const', props.const)
 	}
 
-	if (props?.const && props?.let) {
-		s += '\n\n'
-	}
-
 	if (props?.let) {
 		s += stringifyJsInstanceProps('let', props.let)
 	}
 
-	return s
+	return s.trim()
 }
 
 const stringifyJsInstanceProps = (qualifier, props) => {
-	const list = []
+	const lines = []
 
 	for (const name in props) {
-		list.push(`export ${qualifier} ${name} = ${stringifyJsValue(props[name])}`)
+		lines.push('\n')
+		lines.push('\n// ' + props[name])
+		lines.push(`\nexport ${qualifier} ${name}`)
 	}
 
-	return list.join('\n')
-}
-
-const stringifyJsValue = (v) => {
-	switch (typeof v) {
-		case 'string':
-			return `"${v}"`
-		// TODO: Objects and Arrays
-		default:
-			return v
-	}
+	return lines.join('')
 }

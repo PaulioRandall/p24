@@ -1,18 +1,18 @@
 import {
-	stringifyNodeAsHtml,
-	stringifyNodeInstancePropsAsJs,
+	stringifyInstancePropsAsHtml,
+	stringifyInstancePropsAsJs,
 } from './node_stringer'
 
 const lines = (...lines) => lines.join('\n')
 
 describe('renderer.js', () => {
-	describe('stringifyNodeAsHtml', () => {
+	describe('stringifyInstancePropsAsHtml', () => {
 		test('With no props', () => {
 			const node = {
 				name: 'Component',
 			}
 
-			const act = stringifyNodeAsHtml(node)
+			const act = stringifyInstancePropsAsHtml(node)
 			const exp = `<Component />`
 
 			expect(act).toEqual(exp)
@@ -32,7 +32,7 @@ describe('renderer.js', () => {
 				},
 			}
 
-			const act = stringifyNodeAsHtml(node)
+			const act = stringifyInstancePropsAsHtml(node)
 			const exp = lines(
 				//
 				'<Component',
@@ -61,7 +61,7 @@ describe('renderer.js', () => {
 				},
 			}
 
-			const act = stringifyNodeAsHtml(node)
+			const act = stringifyInstancePropsAsHtml(node)
 			const exp = lines(
 				'<Component',
 				'\t<!-- let -->',
@@ -90,7 +90,7 @@ describe('renderer.js', () => {
 				},
 			}
 
-			const act = stringifyNodeAsHtml(node)
+			const act = stringifyInstancePropsAsHtml(node)
 			const exp = lines(
 				'<Component',
 				'\t<!-- const -->',
@@ -105,16 +105,16 @@ describe('renderer.js', () => {
 		})
 	})
 
-	describe('stringifyNodeInstancePropsAsJs', () => {
+	describe('stringifyInstancePropsAsJs', () => {
 		test('With no props', () => {
-			const act = stringifyNodeInstancePropsAsJs({})
+			const act = stringifyInstancePropsAsJs({})
 			const exp = ``
 
 			expect(act).toEqual(exp)
 		})
 
 		test('With undefined props', () => {
-			const act = stringifyNodeInstancePropsAsJs(undefined)
+			const act = stringifyInstancePropsAsJs(undefined)
 			const exp = ``
 
 			expect(act).toEqual(exp)
@@ -123,24 +123,32 @@ describe('renderer.js', () => {
 		test('With const & let props', () => {
 			const props = {
 				const: {
-					alpha: 'string',
-					bravo: true,
+					alpha: 'Alpha docs',
+					bravo: 'Bravo docs',
 				},
 				let: {
-					charlie: 123,
-					delta: null,
-					echo: undefined,
+					charlie: 'Charlie docs',
+					delta: 'Delta docs',
+					echo: 'Echo docs',
 				},
 			}
 
-			const act = stringifyNodeInstancePropsAsJs(props)
+			const act = stringifyInstancePropsAsJs(props)
 			const exp = lines(
-				'export const alpha = "string"',
-				'export const bravo = true',
+				'// Alpha docs',
+				'export const alpha',
 				'',
-				'export let charlie = 123',
-				'export let delta = null',
-				'export let echo = undefined'
+				'// Bravo docs',
+				'export const bravo',
+				'',
+				'// Charlie docs',
+				'export let charlie',
+				'',
+				'// Delta docs',
+				'export let delta',
+				'',
+				'// Echo docs',
+				'export let echo'
 			)
 
 			expect(act).toEqual(exp)
