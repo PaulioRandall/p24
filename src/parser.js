@@ -9,7 +9,7 @@ import p23 from 'p23'
 //P24.slot.<name>:
 
 export const parse = (src) => {
-	return p23(src, { prefix: 'p24' }) //
+	return p23(src, { prefix: 'p24' })
 		.map(trimNameAndDescription)
 		.map(useFilenameIfNameMissing)
 		.map(makeModuleIfMissing)

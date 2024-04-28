@@ -1,2 +1,2 @@
-export { default as default } from './parser'
+export { default as default } from './renderer'
 export { parse } from './parser'
