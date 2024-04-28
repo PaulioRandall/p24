@@ -1,3 +1,6 @@
+// TODO: Rethink how to do HTML.
+// TODO: Mock up how I think it should look.
+
 export const stringifyInstancePropsAsHtml = (node) => {
 	let s = `<` + node.name
 

@@ -1,7 +1,7 @@
 import {
 	stringifyInstancePropsAsHtml,
 	stringifyInstancePropsAsJs,
-} from './node_stringer'
+} from './node_stringer.js'
 
 const lines = (...lines) => lines.join('\n')
 
