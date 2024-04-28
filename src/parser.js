@@ -138,5 +138,3 @@ const renameSlotToSlots = (meta) => {
 const trimSpace = (s) => {
 	return typeof s === 'string' ? s.trim() : ''
 }
-
-export default parse
