@@ -1,16 +1,12 @@
 import path from 'path'
 import fs from 'fs'
-import { parse, stringifyInstancePropsAsJs } from '../src/index.js'
+import { parse, mdStringify } from '../src/index.js'
 
 try {
 	const components = parse('./src')
 	const docs = components //
 		.map((c) => c.nodes)
-		.map((n) => {
-			n.text = stringifyInstancePropsAsJs(n.props)
-			return n
-		})
-		.map(toMdString)
+		.map(mdStringify)
 		.join('\n\n')
 
 	const templateFile = path //
@@ -23,14 +19,6 @@ try {
 	createOrReplaceFile(realFile, content)
 } catch (err) {
 	console.error(err)
-}
-
-function toMdString(n) {
-	if (!n.text) {
-		return `### ${n.name}`
-	}
-
-	return [`### ${n.name}`, '', '```js', n.text, '```'].join('\n')
 }
 
 function readFile(file) {

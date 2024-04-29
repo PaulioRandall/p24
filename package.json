@@ -25,7 +25,8 @@
 	"scripts": {
 		"fmt": "prettier --log-level warn --write .",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
-		"commit": "npm run fmt && npm run test && cat ./scripts/ready-to-ship.txt"
+		"commit": "npm run fmt && npm run test && cat ./scripts/ready-to-ship.txt",
+		"gen": "node ./scripts/generate-readme.js"
 	},
 	"devDependencies": {
 		"jest": "29.7.0",
