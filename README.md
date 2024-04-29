@@ -4,7 +4,7 @@ Simple tool for documenting Svelte components via P23.
 
 ## Components
 
-### AlbumListItem
+### `<AlbumListItem>`
 
 Details about an album. Designed to be used within a grid or flex grid.
 
@@ -27,15 +27,15 @@ Details about an album. Designed to be used within a grid or flex grid.
 <slot />
 ```
 
-### ModuleProps
+### `<ModuleProps>`
 
 > No documentation.
 
-### Name and Description Component
+### `<Name and Description Component>`
 
 Just a simple component with a name and description.
 
-### Props
+### `<Props>`
 
 ```html
 <script>
@@ -47,7 +47,7 @@ Just a simple component with a name and description.
 </script>
 ```
 
-### Slots
+### `<Slots>`
 
 ```html
 <!-- Meh -->

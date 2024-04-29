@@ -10,7 +10,7 @@ describe('md_stringify.js', () => {
 		}
 
 		const act = mdStringify(node)
-		const exp = lines('### Component', '', 'Message.')
+		const exp = lines('### `<Component>`', '', 'Message.')
 
 		expect(act).toEqual(exp)
 	})
@@ -22,7 +22,7 @@ describe('md_stringify.js', () => {
 		}
 
 		const act = mdStringify(node)
-		const exp = lines('### Component', '', '> No documentation.')
+		const exp = lines('### `<Component>`', '', '> No documentation.')
 
 		expect(act).toEqual(exp)
 	})
@@ -45,7 +45,7 @@ describe('md_stringify.js', () => {
 
 		const act = mdStringify(node)
 		const exp = lines(
-			'### Component',
+			'### `<Component>`',
 			'',
 			'```html',
 			'<script>',
@@ -82,7 +82,7 @@ describe('md_stringify.js', () => {
 
 		const act = mdStringify(node)
 		const exp = lines(
-			'### Component',
+			'### `<Component>`',
 			'',
 			'```html',
 			'<!-- 123 -->',
@@ -123,7 +123,7 @@ describe('md_stringify.js', () => {
 
 		const act = mdStringify(node)
 		const exp = lines(
-			'### Component',
+			'### `<Component>`',
 			'',
 			'Message.',
 			'',
@@ -158,88 +158,4 @@ describe('md_stringify.js', () => {
 
 		expect(act).toEqual(exp)
 	})
-
-	/*
-
-
-		test('With const & let props', () => {
-			const props = {
-				const: {
-					alpha: 'Alpha docs',
-					bravo: 'Bravo docs',
-				},
-				let: {
-					charlie: 'Charlie docs',
-					delta: 'Delta docs',
-					echo: 'Echo docs',
-				},
-			}
-
-			const act = stringifyJs.props(props)
-			const exp = lines(
-				'// Alpha docs',
-				'export const alpha',
-				'',
-				'// Bravo docs',
-				'export const bravo',
-				'',
-				'// Charlie docs',
-				'export let charlie',
-				'',
-				'// Delta docs',
-				'export let delta',
-				'',
-				'// Echo docs',
-				'export let echo'
-			)
-
-			expect(act).toEqual(exp)
-		})
-	})
-
-	describe('stringifyJs.slots', () => {
-		test('With no slots', () => {
-			const act = stringifyJs.slots({})
-			const exp = ``
-
-			expect(act).toEqual(exp)
-		})
-
-		test('With undefined slots', () => {
-			const act = stringifyJs.slots(undefined)
-			const exp = ``
-
-			expect(act).toEqual(exp)
-		})
-
-		test('With default slot', () => {
-			const slots = {
-				default: 'Message',
-			}
-
-			const act = stringifyJs.slots(slots)
-			const exp = lines('// Message', '<slot />')
-
-			expect(act).toEqual(exp)
-		})
-
-		test('With named slots', () => {
-			const slots = {
-				abc: '123',
-				xyz: '789'
-			}
-
-			const act = stringifyJs.slots(slots)
-			const exp = lines(
-				'// 123',
-				'<slot name="abc" />',
-				'',
-				'// 789',
-				'<slot name="xyz" />',
-			)
-
-			expect(act).toEqual(exp)
-		})
-	})
-	*/
 })

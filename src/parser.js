@@ -8,7 +8,7 @@ import p23 from 'p23'
 //P24.let.<name>:
 //P24.slot.<name>:
 
-export const parse = (src) => {
+export default (src) => {
 	return p23(src, { prefix: 'p24' })
 		.map(trimNameAndDescription)
 		.map(useFilenameIfNameMissing)

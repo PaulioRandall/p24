@@ -23,7 +23,7 @@ function has(obj) {
 export default (node) => {
 	const sb = new StringBuilder()
 
-	sb.line(`### ${node.name}`)
+	sb.line('### ' + '`<' + node.name + '>`')
 
 	const hasProps = has(node.props?.const) || has(node.props?.let)
 	const hasSlots = has(node.slots)

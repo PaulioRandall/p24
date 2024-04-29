@@ -1,3 +1,3 @@
-export * from './parser.js'
-export { default as mdStringify } from './md_stringify.js'
-export { parse as default } from './parser.js'
+export { default as renderReadme } from './render_readme.js'
+export { default as toMarkdown } from './md_stringify.js'
+export { default as parse } from './parser.js'
