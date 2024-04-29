@@ -27,6 +27,49 @@ describe('md_stringify.js', () => {
 		expect(act).toEqual(exp)
 	})
 
+	test('With const & let module props', () => {
+		const node = {
+			name: 'Component',
+			module: {
+				const: {
+					alpha: 'Alpha docs',
+					bravo: 'Bravo docs',
+				},
+				let: {
+					charlie: 'Charlie docs',
+					delta: 'Delta docs',
+					echo: 'Echo docs',
+				},
+			},
+		}
+
+		const act = mdStringify(node)
+		const exp = lines(
+			'### `<Component>`',
+			'',
+			'```html',
+			'<script context="module">',
+			'\t// Alpha docs',
+			'\texport const alpha',
+			'',
+			'\t// Bravo docs',
+			'\texport const bravo',
+			'',
+			'\t// Charlie docs',
+			'\texport let charlie',
+			'',
+			'\t// Delta docs',
+			'\texport let delta',
+			'',
+			'\t// Echo docs',
+			'\texport let echo',
+			'</script>',
+			'```'
+		)
+
+		expect(act).toEqual(exp)
+	})
+
 	test('With const & let props', () => {
 		const node = {
 			name: 'Component',
@@ -103,6 +146,17 @@ describe('md_stringify.js', () => {
 		const node = {
 			name: 'Component',
 			description: 'Message.',
+			module: {
+				const: {
+					alpha: 'Alpha docs',
+					bravo: 'Bravo docs',
+				},
+				let: {
+					charlie: 'Charlie docs',
+					delta: 'Delta docs',
+					echo: 'Echo docs',
+				},
+			},
 			props: {
 				const: {
 					alpha: 'Alpha docs',
@@ -128,6 +182,23 @@ describe('md_stringify.js', () => {
 			'Message.',
 			'',
 			'```html',
+			'<script context="module">',
+			'\t// Alpha docs',
+			'\texport const alpha',
+			'',
+			'\t// Bravo docs',
+			'\texport const bravo',
+			'',
+			'\t// Charlie docs',
+			'\texport let charlie',
+			'',
+			'\t// Delta docs',
+			'\texport let delta',
+			'',
+			'\t// Echo docs',
+			'\texport let echo',
+			'</script>',
+			'',
 			'<script>',
 			'\t// Alpha docs',
 			'\texport const alpha',

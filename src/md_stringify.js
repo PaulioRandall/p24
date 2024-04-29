@@ -25,11 +25,12 @@ export default (node) => {
 
 	sb.line('### ' + '`<' + node.name + '>`')
 
+	const hasModuleProps = has(node.module?.const) || has(node.module?.let)
 	const hasProps = has(node.props?.const) || has(node.props?.let)
 	const hasSlots = has(node.slots)
-	const hasAnyHtml = hasProps || hasSlots
+	const hasAnyHtml = hasModuleProps || hasProps || hasSlots
 
-	if (!hasAnyHtml && !node.description) {
+	if (!node.description && !hasAnyHtml) {
 		sb.gap()
 		sb.line('> No documentation.')
 		return sb.toString()
@@ -45,8 +46,16 @@ export default (node) => {
 		sb.line('```html')
 	}
 
+	if (hasModuleProps) {
+		appendProps(sb, node.module, 'module')
+	}
+
+	if (hasModuleProps && (hasProps || hasSlots)) {
+		sb.gap()
+	}
+
 	if (hasProps) {
-		appendProps(sb, node)
+		appendProps(sb, node.props)
 	}
 
 	if (hasProps && hasSlots) {
@@ -66,14 +75,18 @@ export default (node) => {
 	return sb.toString()
 }
 
-const appendProps = (sb, node) => {
-	const hasConstProps = has(node.props?.const)
-	const hasLetProps = has(node.props?.let)
+const appendProps = (sb, props, context = '') => {
+	const hasConstProps = has(props.const)
+	const hasLetProps = has(props.let)
 
-	sb.line('<script>')
+	if (context) {
+		sb.line(`<script context="${context}">`)
+	} else {
+		sb.line('<script>')
+	}
 
 	if (hasConstProps) {
-		appendQualifiedProps(sb, 'const', node.props.const)
+		appendQualifiedProps(sb, 'const', props.const)
 	}
 
 	if (hasConstProps && hasLetProps) {
@@ -81,7 +94,7 @@ const appendProps = (sb, node) => {
 	}
 
 	if (hasLetProps) {
-		appendQualifiedProps(sb, 'let', node.props.let)
+		appendQualifiedProps(sb, 'let', props.let)
 	}
 
 	sb.line('</script>')
