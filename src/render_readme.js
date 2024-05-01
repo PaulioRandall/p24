@@ -6,13 +6,13 @@ import mdStringify from './md_stringify.js'
 
 export default function (options = {}) {
 	const {
-		// TODO: Replace 'dir' with 'glob'
-		dir = './src', //
+		glob = 'dist/*.svelte', //
+		globOptions: undefined,
 		templateReadme = './README.template.md',
 		placeholder = '{{DOCS}}',
 	} = options
 
-	const components = parse(dir)
+	const components = parse(glob, options)
 	const docs = composeDocs(components)
 
 	const templateFile = path.resolve(templateReadme)
