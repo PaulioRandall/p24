@@ -5,13 +5,18 @@ import parse from './parser.js'
 import mdStringify from './md_stringify.js'
 
 export default function (options = {}) {
-	const { dir = './src', templateReadme = './README.template.md' } = options
+	const {
+		// TODO: Replace 'dir' with 'glob'
+		dir = './src', //
+		templateReadme = './README.template.md',
+		placeholder = '{{DOCS}}',
+	} = options
 
 	const components = parse(dir)
 	const docs = composeDocs(components)
 
 	const templateFile = path.resolve(templateReadme)
-	const content = readFile(templateFile).replace('{{DOCS}}', docs)
+	const content = readFile(templateFile).replace(placeholder, docs)
 	const realFile = path.resolve('./README.md')
 
 	createOrReplaceFile(realFile, content)

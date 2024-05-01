@@ -58,6 +58,8 @@ export default (node) => {
 		appendProps(sb, node.props)
 	}
 
+	// TODO: <---- Context
+
 	if (hasProps && hasSlots) {
 		sb.gap()
 	}
@@ -69,8 +71,6 @@ export default (node) => {
 	if (hasAnyHtml) {
 		sb.line('```')
 	}
-
-	// TODO: Context
 
 	return sb.toString()
 }
