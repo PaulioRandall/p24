@@ -7,6 +7,7 @@ import p23 from 'p23'
 //P24.const.<name>:
 //P24.let.<name>:
 //P24.slot.<name>:
+//P24.context.<name>:
 
 export default (src) => {
 	return p23(src, { prefix: 'p24' })
@@ -18,11 +19,13 @@ export default (src) => {
 		.map(makeConstIfMissing)
 		.map(makeLetIfMissing)
 		.map(makeSlotIfMissing)
+		.map(makeContextIfMissing)
 		.map(trimModuleConst)
 		.map(trimModuleLet)
 		.map(trimConst)
 		.map(trimLet)
 		.map(trimSlots)
+		.map(trimContext)
 		.map(groupProps)
 		.map(renameSlotToSlots)
 }
@@ -82,6 +85,13 @@ const makeSlotIfMissing = (meta) => {
 	return meta
 }
 
+const makeContextIfMissing = (meta) => {
+	if (typeof meta.nodes.context !== 'object') {
+		meta.nodes.context = {}
+	}
+	return meta
+}
+
 const trimModuleConst = (meta) => {
 	for (const name in meta.nodes.module.const) {
 		meta.nodes.module.const[name] = trimSpace(meta.nodes.module.const[name])
@@ -113,6 +123,13 @@ const trimLet = (meta) => {
 const trimSlots = (meta) => {
 	for (const name in meta.nodes.slot) {
 		meta.nodes.slot[name] = trimSpace(meta.nodes.slot[name])
+	}
+	return meta
+}
+
+const trimContext = (meta) => {
+	for (const name in meta.nodes.context) {
+		meta.nodes.context[name] = trimSpace(meta.nodes.context[name])
 	}
 	return meta
 }

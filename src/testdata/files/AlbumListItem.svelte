@@ -13,6 +13,8 @@
 </script>
 
 <script>
+	import { setContext } from 'svelte'
+
 	//P24.name: AlbumListItem
 	//P24.description: Details about an album. Designed to be used within a grid or flex grid.
 
@@ -29,6 +31,12 @@
 	export let published = null
 
 	//P24.slot.default: A description of the album.
+
+	//P24.context.album-title: See title prop.
+	setContext('album-title', title)
+
+	//P24.context.album-artist: See artist prop.
+	setContext('album-title', artist)
 </script>
 
 <div class="album-list-item">

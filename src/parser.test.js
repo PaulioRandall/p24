@@ -32,6 +32,7 @@ describe('p24', () => {
 		//P24.const.<name>:
 		//P24.let.<name>:
 		//P24.slot.<name>:
+		//P24.context.<name>:
 
 		test('parses component name and description', () => {
 			const file = createSvelteFilePath('NameAndDescription')
@@ -52,6 +53,7 @@ describe('p24', () => {
 							let: {},
 						},
 						slots: {},
+						context: {},
 					},
 				},
 			])
@@ -80,6 +82,7 @@ describe('p24', () => {
 							let: {},
 						},
 						slots: {},
+						context: {},
 					},
 				},
 			])
@@ -108,6 +111,7 @@ describe('p24', () => {
 							},
 						},
 						slots: {},
+						context: {},
 					},
 				},
 			])
@@ -135,6 +139,35 @@ describe('p24', () => {
 							default: 'Meh',
 							abc: '123',
 							xyz: '789',
+						},
+						context: {},
+					},
+				},
+			])
+		})
+
+		test('parses component contexts', () => {
+			const file = createSvelteFilePath('Context')
+			const act = parseToUnix(file)
+
+			expect(act).toEqual([
+				{
+					...generateFileFields(file),
+					nodes: {
+						name: 'Context',
+						description: '',
+						module: {
+							const: {},
+							let: {},
+						},
+						props: {
+							const: {},
+							let: {},
+						},
+						slots: {},
+						context: {
+							'a-b-c': '123',
+							'x-y-z': '789',
 						},
 					},
 				},
@@ -173,6 +206,10 @@ describe('p24', () => {
 						},
 						slots: {
 							default: 'A description of the album.',
+						},
+						context: {
+							'album-title': 'See title prop.',
+							'album-artist': 'See artist prop.',
 						},
 					},
 				},
