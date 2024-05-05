@@ -108,8 +108,16 @@ const appendQualifiedProps = (sb, qualifier, props) => {
 			sb.gap()
 		}
 
-		sb.line('\t// ' + entries[i][1])
+		appendJsComment(sb, entries[i][1])
 		sb.line(`\texport ${qualifier} ${entries[i][0]}`)
+	}
+}
+
+const appendJsComment = (sb, comment) => {
+	comment = comment.replace(/\r/g, '')
+
+	for (const line of comment.split('\n')) {
+		sb.line('\t// ' + line.trim())
 	}
 }
 
@@ -121,7 +129,7 @@ const appendSlots = (sb, slots) => {
 			sb.gap()
 		}
 
-		sb.line('<!-- ' + entries[i][1] + ' -->')
+		appendHtmlComment(sb, entries[i][1])
 
 		if (entries[i][0] === 'default') {
 			sb.line(`<slot />`)
@@ -129,4 +137,19 @@ const appendSlots = (sb, slots) => {
 			sb.line(`<slot name="${entries[i][0]}" />`)
 		}
 	}
+}
+
+const appendHtmlComment = (sb, comment) => {
+	comment = comment.replace(/\r/g, '')
+
+	if (!comment.includes('\n')) {
+		sb.line('<!-- ' + comment + ' -->')
+		return
+	}
+
+	sb.line('<!--')
+	for (const line of comment.split('\n')) {
+		sb.line('\t' + line.trim())
+	}
+	sb.line('-->')
 }
