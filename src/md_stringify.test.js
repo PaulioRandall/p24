@@ -142,6 +142,33 @@ describe('md_stringify.js', () => {
 		expect(act).toEqual(exp)
 	})
 
+	test('With context', () => {
+		const node = {
+			name: 'Component',
+			context: {
+				'a-b-c': 'Abc',
+				'x-y-z': 'Xyz',
+			},
+		}
+
+		const act = mdStringify(node)
+		const exp = lines(
+			'### `<Component>`',
+			'',
+			'```html',
+			'<script>',
+			'\t// Abc',
+			"\tsetContext('a-b-c', ...)",
+			'',
+			'\t// Xyz',
+			"\tsetContext('x-y-z', ...)",
+			'</script>',
+			'```'
+		)
+
+		expect(act).toEqual(exp)
+	})
+
 	test('With everything', () => {
 		const node = {
 			name: 'Component',
@@ -172,6 +199,10 @@ describe('md_stringify.js', () => {
 				default: '123\nAnother line',
 				abc: '456',
 				xyz: '789',
+			},
+			context: {
+				'a-b-c': 'abc ctx',
+				'x-y-z': 'xyz ctx',
 			},
 		}
 
@@ -218,6 +249,12 @@ describe('md_stringify.js', () => {
 			'',
 			'\t// Echo docs',
 			'\texport let echo',
+			'',
+			'\t// abc ctx',
+			"\tsetContext('a-b-c', ...)",
+			'',
+			'\t// xyz ctx',
+			"\tsetContext('x-y-z', ...)",
 			'</script>',
 			'',
 			'<!--',

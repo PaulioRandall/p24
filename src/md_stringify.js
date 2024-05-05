@@ -28,7 +28,8 @@ export default (node) => {
 	const hasModuleProps = has(node.module?.const) || has(node.module?.let)
 	const hasProps = has(node.props?.const) || has(node.props?.let)
 	const hasSlots = has(node.slots)
-	const hasAnyHtml = hasModuleProps || hasProps || hasSlots
+	const hasContext = has(node.context)
+	const hasAnyHtml = hasModuleProps || hasProps || hasSlots || hasContext
 
 	if (!node.description && !hasAnyHtml) {
 		sb.gap()
@@ -47,20 +48,36 @@ export default (node) => {
 	}
 
 	if (hasModuleProps) {
-		appendProps(sb, node.module, 'module')
+		sb.line(`<script context="module">`)
+		appendProps(sb, node.module)
+		sb.line('</script>')
 	}
 
-	if (hasModuleProps && (hasProps || hasSlots)) {
+	if (hasModuleProps && (hasProps || hasSlots || hasContext)) {
 		sb.gap()
+	}
+
+	if (hasProps || hasContext) {
+		sb.line(`<script>`)
 	}
 
 	if (hasProps) {
 		appendProps(sb, node.props)
 	}
 
-	// TODO: <---- Context
+	if (hasProps && hasContext) {
+		sb.gap()
+	}
 
-	if (hasProps && hasSlots) {
+	if (hasContext) {
+		appendContext(sb, node.context)
+	}
+
+	if (hasProps || hasContext) {
+		sb.line(`</script>`)
+	}
+
+	if ((hasProps || hasContext) && hasSlots) {
 		sb.gap()
 	}
 
@@ -75,15 +92,9 @@ export default (node) => {
 	return sb.toString()
 }
 
-const appendProps = (sb, props, context = '') => {
+const appendProps = (sb, props) => {
 	const hasConstProps = has(props.const)
 	const hasLetProps = has(props.let)
-
-	if (context) {
-		sb.line(`<script context="${context}">`)
-	} else {
-		sb.line('<script>')
-	}
 
 	if (hasConstProps) {
 		appendQualifiedProps(sb, 'const', props.const)
@@ -96,8 +107,6 @@ const appendProps = (sb, props, context = '') => {
 	if (hasLetProps) {
 		appendQualifiedProps(sb, 'let', props.let)
 	}
-
-	sb.line('</script>')
 }
 
 const appendQualifiedProps = (sb, qualifier, props) => {
@@ -110,6 +119,19 @@ const appendQualifiedProps = (sb, qualifier, props) => {
 
 		appendJsComment(sb, entries[i][1])
 		sb.line(`\texport ${qualifier} ${entries[i][0]}`)
+	}
+}
+
+const appendContext = (sb, context) => {
+	const entries = Object.entries(context)
+
+	for (let i = 0; i < entries.length; i++) {
+		if (i !== 0) {
+			sb.gap()
+		}
+
+		appendJsComment(sb, entries[i][1])
+		sb.line(`\tsetContext('${entries[i][0]}', ...)`)
 	}
 }
 
