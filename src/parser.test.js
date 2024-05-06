@@ -59,6 +59,31 @@ describe('p24', () => {
 			])
 		})
 
+		test('parses multiline description', () => {
+			const file = createSvelteFilePath('MultilineDescription')
+			const act = parseToUnix(file)
+
+			expect(act).toEqual([
+				{
+					...generateFileFields(file),
+					nodes: {
+						name: 'MultilineDescription',
+						description: 'a\n b\n  c',
+						module: {
+							const: {},
+							let: {},
+						},
+						props: {
+							const: {},
+							let: {},
+						},
+						slots: {},
+						context: {},
+					},
+				},
+			])
+		})
+
 		test('parses component module props', () => {
 			const file = createSvelteFilePath('ModuleProps')
 			const act = parseToUnix(file)

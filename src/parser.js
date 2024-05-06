@@ -32,7 +32,8 @@ export default (src) => {
 
 const trimNameAndDescription = (meta) => {
 	meta.nodes.name = trimSpace(meta.nodes.name)
-	meta.nodes.description = trimSpace(meta.nodes.description)
+
+	meta.nodes.description = cleanStringNode(meta.nodes.description)
 	return meta
 }
 
@@ -94,42 +95,44 @@ const makeContextIfMissing = (meta) => {
 
 const trimModuleConst = (meta) => {
 	for (const name in meta.nodes.module.const) {
-		meta.nodes.module.const[name] = trimSpace(meta.nodes.module.const[name])
+		meta.nodes.module.const[name] = cleanStringNode(
+			meta.nodes.module.const[name]
+		)
 	}
 	return meta
 }
 
 const trimModuleLet = (meta) => {
 	for (const name in meta.nodes.module.let) {
-		meta.nodes.module.let[name] = trimSpace(meta.nodes.module.let[name])
+		meta.nodes.module.let[name] = cleanStringNode(meta.nodes.module.let[name])
 	}
 	return meta
 }
 
 const trimConst = (meta) => {
 	for (const name in meta.nodes.const) {
-		meta.nodes.const[name] = trimSpace(meta.nodes.const[name])
+		meta.nodes.const[name] = cleanStringNode(meta.nodes.const[name])
 	}
 	return meta
 }
 
 const trimLet = (meta) => {
 	for (const name in meta.nodes.let) {
-		meta.nodes.let[name] = trimSpace(meta.nodes.let[name])
+		meta.nodes.let[name] = cleanStringNode(meta.nodes.let[name])
 	}
 	return meta
 }
 
 const trimSlots = (meta) => {
 	for (const name in meta.nodes.slot) {
-		meta.nodes.slot[name] = trimSpace(meta.nodes.slot[name])
+		meta.nodes.slot[name] = cleanStringNode(meta.nodes.slot[name])
 	}
 	return meta
 }
 
 const trimContext = (meta) => {
 	for (const name in meta.nodes.context) {
-		meta.nodes.context[name] = trimSpace(meta.nodes.context[name])
+		meta.nodes.context[name] = cleanStringNode(meta.nodes.context[name])
 	}
 	return meta
 }
@@ -154,4 +157,36 @@ const renameSlotToSlots = (meta) => {
 
 const trimSpace = (s) => {
 	return typeof s === 'string' ? s.trim() : ''
+}
+
+const cleanStringNode = (node) => {
+	if (!node) {
+		return ''
+	}
+
+	const lines = node
+		.replace(/\r/g, '')
+		.split('\n')
+		.map((l) => l.replace(/\s+$/, ''))
+
+	while (lines.length > 0 && lines[0].trim() === '') {
+		lines.splice(0, 1)
+	}
+
+	if (lines.length === 0) {
+		return ''
+	}
+
+	const matches = lines[0].match(/^\s+/)
+	if (!matches) {
+		return lines.join()
+	}
+
+	const indent = matches[0]
+
+	return lines
+		.map((l) => {
+			return l.startsWith(indent) ? l.slice(indent.length) : ''
+		})
+		.join('\n')
 }

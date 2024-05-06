@@ -139,7 +139,7 @@ const appendJsComment = (sb, comment) => {
 	comment = comment.replace(/\r/g, '')
 
 	for (const line of comment.split('\n')) {
-		sb.line('\t// ' + line.replace(/\s+$/, ''))
+		sb.line('\t// ' + line)
 	}
 }
 
@@ -171,7 +171,7 @@ const appendHtmlComment = (sb, comment) => {
 
 	sb.line('<!--')
 	for (const line of comment.split('\n')) {
-		sb.line('\t' + line.replace(/\s+$/, ''))
+		sb.line('\t' + line)
 	}
 	sb.line('-->')
 }
