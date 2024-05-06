@@ -113,6 +113,35 @@ describe('md_stringify.js', () => {
 		expect(act).toEqual(exp)
 	})
 
+	test('With props that have indented lines', () => {
+		const node = {
+			name: 'Component',
+			props: {
+				const: {
+					alpha: '{\n\ta\n\tb\n\tc\n}',
+				},
+			},
+		}
+
+		const act = mdStringify(node)
+		const exp = lines(
+			'### `<Component>`',
+			'',
+			'```html',
+			'<script>',
+			'\t// {',
+			'\t// 	a',
+			'\t// 	b',
+			'\t// 	c',
+			'\t// }',
+			'\texport const alpha',
+			'</script>',
+			'```'
+		)
+
+		expect(act).toEqual(exp)
+	})
+
 	test('With slots', () => {
 		const node = {
 			name: 'Component',
