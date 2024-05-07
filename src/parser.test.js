@@ -96,20 +96,47 @@ describe('p24', () => {
 		const cleaned = 'abc\n  xyz'
 
 		test('trims name', () => {
-			const node = { name: ' abc ' }
-			formatNodes(node)
-			expect(node.name).toEqual('abc')
+			const meta = {
+				nodes: {
+					name: ' abc ',
+				},
+			}
+			formatNodes(meta)
+			expect(meta.nodes.name).toEqual('abc')
 		})
 
 		test('cleans description', () => {
-			const node = { description: uncleaned }
-			formatNodes(node)
-			expect(node.description).toEqual(cleaned)
+			const meta = {
+				nodes: {
+					description: uncleaned,
+				},
+			}
+			formatNodes(meta)
+			expect(meta.nodes.description).toEqual(cleaned)
 		})
 
 		test('cleans module props', () => {
-			const node = {
-				module: {
+			const meta = {
+				nodes: {
+					module: {
+						const: {
+							name: uncleaned,
+						},
+						let: {
+							name: uncleaned,
+						},
+					},
+				},
+			}
+
+			formatNodes(meta)
+			expect(meta.nodes.module.const.name).toEqual(cleaned)
+			expect(meta.nodes.module.let.name).toEqual(cleaned)
+		})
+
+		test('cleans props', () => {
+			const meta = {
+				nodes: {
 					const: {
 						name: uncleaned,
 					},
@@ -119,46 +146,34 @@ describe('p24', () => {
 				},
 			}
 
-			formatNodes(node)
-			expect(node.module.const.name).toEqual(cleaned)
-			expect(node.module.let.name).toEqual(cleaned)
-		})
-
-		test('cleans props', () => {
-			const node = {
-				const: {
-					name: uncleaned,
-				},
-				let: {
-					name: uncleaned,
-				},
-			}
-
-			formatNodes(node)
-			expect(node.const.name).toEqual(cleaned)
-			expect(node.let.name).toEqual(cleaned)
+			formatNodes(meta)
+			expect(meta.nodes.const.name).toEqual(cleaned)
+			expect(meta.nodes.let.name).toEqual(cleaned)
 		})
 
 		test('cleans slots', () => {
-			const node = {
-				slot: {
-					name: uncleaned,
+			const meta = {
+				nodes: {
+					slot: {
+						name: uncleaned,
+					},
 				},
 			}
 
-			formatNodes(node)
-			expect(node.slot.name).toEqual(cleaned)
+			formatNodes(meta)
+			expect(meta.nodes.slot.name).toEqual(cleaned)
 		})
 
 		test('cleans context', () => {
-			const node = {
-				context: {
-					name: uncleaned,
+			const meta = {
+				nodes: {
+					context: {
+						name: uncleaned,
+					},
 				},
 			}
-
-			formatNodes(node)
-			expect(node.context.name).toEqual(cleaned)
+			formatNodes(meta)
+			expect(meta.nodes.context.name).toEqual(cleaned)
 		})
 	})
 
