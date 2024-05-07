@@ -1,5 +1,5 @@
 import upath from 'upath'
-import parse from './parser.js'
+import parse, { formatNodes, findParentsAndField, apply } from './parser.js'
 
 const testdataDir = './src/testdata'
 
@@ -24,6 +24,144 @@ const parseToUnix = (f) => {
 }
 
 describe('p24', () => {
+	//P24.name:
+	//P24.description:
+	//P24.module.const.<name>:
+	//P24.module.let.<name>:
+	//P24.const.<name>:
+	//P24.let.<name>:
+	//P24.slot.<name>:
+	//P24.context.<name>:
+
+	const INPUT_NODES_SCHEMA = {
+		name: '',
+		description: '',
+		module: {
+			const: {},
+			let: {},
+		},
+		const: {},
+		let: {},
+		slot: {},
+		context: {},
+	}
+
+	const OUTPUT_NODES_SCHEMA = {
+		name: '',
+		description: '',
+		module: {
+			const: {},
+			let: {},
+		},
+		props: {
+			const: {},
+			let: {},
+		},
+		slots: {},
+		context: {},
+	}
+
+	describe('findParentsAndField', () => {
+		test('no parents', () => {
+			const [parents, field] = findParentsAndField('name')
+			expect(parents).toEqual(expect.arrayContaining([]))
+			expect(field).toEqual('name')
+		})
+
+		test('some parents', () => {
+			const [parents, field] = findParentsAndField('props.const.name')
+			expect(parents).toEqual(expect.arrayContaining(['props', 'const']))
+			expect(field).toEqual('name')
+		})
+	})
+
+	describe('apply', () => {
+		test('applies as expected', () => {
+			const nodes = {
+				props: {
+					const: {
+						name: '      ',
+					},
+				},
+			}
+
+			const trim = (s) => s.trim(s)
+			apply(nodes, 'props.const.name', trim)
+			expect(nodes.props.const.name).toEqual('')
+		})
+	})
+
+	describe('formatNodes', () => {
+		const uncleaned = '  \n  abc  \n    xyz  \n  '
+		const cleaned = 'abc\n  xyz'
+
+		test('trims name', () => {
+			const node = { name: ' abc ' }
+			formatNodes(node)
+			expect(node.name).toEqual('abc')
+		})
+
+		test('cleans description', () => {
+			const node = { description: uncleaned }
+			formatNodes(node)
+			expect(node.description).toEqual(cleaned)
+		})
+
+		test('cleans module props', () => {
+			const node = {
+				module: {
+					const: {
+						name: uncleaned,
+					},
+					let: {
+						name: uncleaned,
+					},
+				},
+			}
+
+			formatNodes(node)
+			expect(node.module.const.name).toEqual(cleaned)
+			expect(node.module.let.name).toEqual(cleaned)
+		})
+
+		test('cleans props', () => {
+			const node = {
+				const: {
+					name: uncleaned,
+				},
+				let: {
+					name: uncleaned,
+				},
+			}
+
+			formatNodes(node)
+			expect(node.const.name).toEqual(cleaned)
+			expect(node.let.name).toEqual(cleaned)
+		})
+
+		test('cleans slots', () => {
+			const node = {
+				slot: {
+					name: uncleaned,
+				},
+			}
+
+			formatNodes(node)
+			expect(node.slot.name).toEqual(cleaned)
+		})
+
+		test('cleans context', () => {
+			const node = {
+				context: {
+					name: uncleaned,
+				},
+			}
+
+			formatNodes(node)
+			expect(node.context.name).toEqual(cleaned)
+		})
+	})
+
 	describe('parse', () => {
 		//P24.name:
 		//P24.description:

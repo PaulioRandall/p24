@@ -1,4 +1,5 @@
 import p23 from 'p23'
+import { trim, clean } from './formatters.js'
 
 //P24.name:
 //P24.description:
@@ -9,7 +10,87 @@ import p23 from 'p23'
 //P24.slot.<name>:
 //P24.context.<name>:
 
+export const formatNodes = (nodes) => {
+	createMissingNodes(nodes)
+
+	apply(nodes, 'name', trim)
+	apply(nodes, 'description', clean)
+	applyToAll(nodes, 'module.const', clean)
+	applyToAll(nodes, 'module.let', clean)
+	applyToAll(nodes, 'const', clean)
+	applyToAll(nodes, 'let', clean)
+	applyToAll(nodes, 'slot', clean)
+	applyToAll(nodes, 'context', clean)
+}
+
+const createMissingNodes = (nodes) => {
+	createMissingNode(nodes, 'name', '')
+	createMissingNode(nodes, 'description', '')
+	createMissingNode(nodes, 'module', {})
+	createMissingNode(nodes, 'module.const', {})
+	createMissingNode(nodes, 'module.let', {})
+	createMissingNode(nodes, 'const', {})
+	createMissingNode(nodes, 'let', {})
+	createMissingNode(nodes, 'slot', {})
+	createMissingNode(nodes, 'context', {})
+}
+
+const createMissingNode = (nodes, path, defaultValue) => {
+	const [parents, field] = findParentsAndField(path)
+	const parentObj = getParentObject(nodes, parents)
+
+	if (!parentObj) {
+		console.log(path, parents, field)
+	}
+
+	if (!(field in parentObj)) {
+		parentObj[field] = defaultValue
+	}
+}
+
+export const apply = (nodes, path, func) => {
+	const [parents, field] = findParentsAndField(path)
+	const parentObj = getParentObject(nodes, parents)
+	parentObj[field] = func(parentObj[field])
+}
+
+export const applyToAll = (nodes, path, func) => {
+	const [parents, field] = findParentsAndField(path)
+	const parentOfParentObj = getParentObject(nodes, parents)
+	const parentObj = parentOfParentObj[field]
+
+	for (const key in parentObj) {
+		parentObj[key] = func(parentObj[key])
+	}
+}
+
+export const findParentsAndField = (path) => {
+	const parents = path.split('.')
+	const lastIdx = parents.length - 1
+	const field = parents[lastIdx]
+	parents.splice(lastIdx)
+	return [parents, field]
+}
+
+const getParentObject = (nodes, path) => {
+	let parent = nodes
+	for (const p of path) {
+		parent = parent[p]
+	}
+	return parent
+}
+
 export default (src) => {
+	const meta = p23(src, { prefix: 'p24' })
+
+	for (const m of meta) {
+		formatNodes(m.nodes)
+	}
+
+	//useFilenameIfNameMissing(meta)
+	//groupProps(meta)
+	//renameSlotToSlots(meta)
+
 	return p23(src, { prefix: 'p24' })
 		.map(trimNameAndDescription)
 		.map(useFilenameIfNameMissing)
@@ -169,8 +250,14 @@ const cleanStringNode = (node) => {
 		.split('\n')
 		.map((l) => l.replace(/\s+$/, ''))
 
+	// Filter empty lines at start
 	while (lines.length > 0 && lines[0].trim() === '') {
 		lines.splice(0, 1)
+	}
+
+	// Filter empty lines at end
+	while (lines.length > 0 && lines[lines.length - 1].trim() === '') {
+		lines.splice(lines.length - 1, 1)
 	}
 
 	if (lines.length === 0) {
