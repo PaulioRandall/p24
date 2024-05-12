@@ -7,7 +7,7 @@
 		'Symphonic Death Metal',
 	]
 
-	//P24.module.let.formatDate:
+	//P24.m.l.formatDate:
 	// Formats any dates, defaults to DD/MM/YYYY.
 	export let formatDate = (date) => {
 		return date.split('-').reverse().join('/')
@@ -18,28 +18,28 @@
 	import { setContext } from 'svelte'
 
 	//P24.name: AlbumListItem
-	//P24.description:
+	//P24.desc:
 	// Details about an album. Designed to be used within a grid or flex grid.
 
 	//P24.prop.const.func: A random function to bind on that does nothing.
 	//P24.default.prop.const.func: {}
 	export const func = () => {}
 
-	//P24.prop.let.title: Title of the album.
+	//P24.p.l.title: Title of the album.
 	export let title
 
-	//P24.prop.let.artist: Artist or band who created the album.
+	//P24.p.let.artist: Artist or band who created the album.
 	export let artist
 
-	//P24.prop.let.published:
+	//P24.prop.l.published:
 	// If known, the published date of the album in the format YYYY-MM-DD.
-	//P24.default.prop.let.published: null
+	//P24.d.p.l.published: null
 	export let published = null
 
 	//P24.context.album-title: See title prop.
 	setContext('album-title', title)
 
-	//P24.context.album-artist: See artist prop.
+	//P24.c.album-artist: See artist prop.
 	setContext('album-title', artist)
 </script>
 
@@ -50,7 +50,7 @@
 		<p><b>Published:</b> {formatDate(published)}</p>
 	{/if}
 	<!--P24.slot.default: A description of the album. -->
-	<!--P24.default.slot.default: "No description". -->
+	<!--P24.d.s.default: "No description". -->
 	<slot>
 		No description.
 	</slot>

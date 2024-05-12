@@ -1,7 +1,7 @@
 <script>
-	//P24.slot.default: Meh
-	//P24.slot.abc: 123
-	//P24.slot.xyz: 789
+	//P24.slot.default: Mew
+	//P24.slot.alpha: Abra
+	//P24.s.bravo: Bellsprout
 </script>
 
 <div />

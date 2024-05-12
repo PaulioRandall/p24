@@ -28,28 +28,33 @@ describe('p24', () => {
 		name: '',
 		description: '',
 		module: {
+			// 'm'
 			const: {},
 			let: {},
 		},
 		prop: {
+			// 'p'
 			const: {},
 			let: {},
 		},
-		slot: {},
-		context: {},
+		slot: {}, // 's'
+		context: {}, // 'c'
 		default: {
+			// 'd'
 			name: '',
 			description: '',
 			module: {
+				// 'm'
 				const: {},
 				let: {},
 			},
 			prop: {
+				// 'p'
 				const: {},
 				let: {},
 			},
-			slot: {},
-			context: {},
+			slot: {}, // 's'
+			context: {}, // 'c'
 		},
 	}
 
@@ -276,9 +281,9 @@ describe('p24', () => {
 
 			expNodes.name = 'Slots'
 			expNodes.slots = {
-				default: 'Meh',
-				abc: '123',
-				xyz: '789',
+				default: 'Mew',
+				alpha: 'Abra',
+				bravo: 'Bellsprout',
 			}
 
 			expect(act).toEqual([
@@ -296,8 +301,8 @@ describe('p24', () => {
 
 			expNodes.name = 'Context'
 			expNodes.context = {
-				'a-b-c': '123',
-				'x-y-z': '789',
+				'a-b-c': 'Abra',
+				'x-y-z': 'Bellsprout',
 			}
 
 			expect(act).toEqual([

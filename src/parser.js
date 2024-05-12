@@ -17,6 +17,7 @@ import { trim, clean } from './formatters.js'
 //P24.p.c.<name>:
 //P24.p.l.<name>:
 //P24.s.<name>:
+//P24.ctx.<name>:
 //P24.c.<name>:
 
 //P24.default.module.const.<name>:
@@ -49,44 +50,59 @@ export const formatNodes = (nodes) => {
 	apply(nodes, 'name', trim)
 
 	createMissingNode(nodes, 'description', '')
+	applyValueMerge(nodes, 'desc', 'description')
 	apply(nodes, 'description', clean)
 
 	createMissingNode(nodes, 'default', {})
+	applyNodeMerge(nodes, 'd', 'default')
 
 	createMissingNode(nodes, 'module', {})
 	createMissingNode(nodes, 'module.const', {})
 	createMissingNode(nodes, 'module.let', {})
+	applyNodeMerge(nodes, 'm', 'module')
+	applyNodeMerge(nodes, 'module.c', 'module.const')
+	applyNodeMerge(nodes, 'module.l', 'module.let')
+	applyToAll(nodes, 'module.const', clean)
+	applyToAll(nodes, 'module.let', clean)
+
 	createMissingNode(nodes, 'default.module', {})
 	createMissingNode(nodes, 'default.module.const', {})
 	createMissingNode(nodes, 'default.module.let', {})
-	mergeNodes(nodes, 'm', 'module')
-	mergeNodes(nodes, 'module.c', 'module.const')
-	mergeNodes(nodes, 'module.l', 'module.let')
-	applyToAll(nodes, 'module.const', clean)
-	applyToAll(nodes, 'module.let', clean)
+	applyNodeMerge(nodes, 'default.m', 'default.module')
+	applyNodeMerge(nodes, 'default.module.c', 'default.module.const')
+	applyNodeMerge(nodes, 'default.module.l', 'default.module.let')
 	applyToAll(nodes, 'default.module.const', clean)
 	applyToAll(nodes, 'default.module.let', clean)
 
 	createMissingNode(nodes, 'prop', {})
 	createMissingNode(nodes, 'prop.const', {})
 	createMissingNode(nodes, 'prop.let', {})
+	applyNodeMerge(nodes, 'p', 'prop')
+	applyNodeMerge(nodes, 'prop.c', 'prop.const')
+	applyNodeMerge(nodes, 'prop.l', 'prop.let')
+	applyToAll(nodes, 'prop.const', clean)
+	applyToAll(nodes, 'prop.let', clean)
+
 	createMissingNode(nodes, 'default.prop', {})
 	createMissingNode(nodes, 'default.prop.const', {})
 	createMissingNode(nodes, 'default.prop.let', {})
-	mergeNodes(nodes, 'p', 'prop')
-	mergeNodes(nodes, 'prop.c', 'prop.const')
-	mergeNodes(nodes, 'prop.l', 'prop.let')
-	applyToAll(nodes, 'prop.const', clean)
-	applyToAll(nodes, 'prop.let', clean)
+	applyNodeMerge(nodes, 'default.p', 'default.prop')
+	applyNodeMerge(nodes, 'default.prop.c', 'default.prop.const')
+	applyNodeMerge(nodes, 'default.prop.l', 'default.prop.let')
 	applyToAll(nodes, 'default.prop.const', clean)
 	applyToAll(nodes, 'default.prop.let', clean)
 
 	createMissingNode(nodes, 'slot', {})
-	createMissingNode(nodes, 'default.slot', {})
+	applyNodeMerge(nodes, 's', 'slot')
 	applyToAll(nodes, 'slot', clean)
+
+	createMissingNode(nodes, 'default.slot', {})
+	applyNodeMerge(nodes, 'default.s', 'default.slot')
 	applyToAll(nodes, 'default.slot', clean)
 
 	createMissingNode(nodes, 'context', {})
+	applyNodeMerge(nodes, 'c', 'context')
+	applyNodeMerge(nodes, 'ctx', 'context')
 	applyToAll(nodes, 'context', clean)
 }
 
@@ -99,7 +115,21 @@ const createMissingNode = (nodes, path, defaultValue = undefined) => {
 	}
 }
 
-const mergeNodes = (nodes, src, dst) => {
+const applyValueMerge = (nodes, src, dst) => {
+	const [dstParents, dstField] = findParentsAndField(dst)
+	const dstParentObj = getParentObject(nodes, dstParents)
+
+	const [srcParents, srcField] = findParentsAndField(src)
+	const srcParentObj = getParentObject(nodes, srcParents)
+	const srcVal = srcParentObj[srcField]
+
+	if (srcVal) {
+		dstParentObj[dstField] = srcVal
+		delete srcParentObj[srcField]
+	}
+}
+
+const applyNodeMerge = (nodes, src, dst) => {
 	const [dstParents, dstField] = findParentsAndField(dst)
 	const dstParentObj = getParentObject(nodes, dstParents)
 	const dstObj = dstParentObj[dstField]
@@ -109,10 +139,30 @@ const mergeNodes = (nodes, src, dst) => {
 	const srcObj = srcParentObj[srcField]
 
 	for (const key in srcObj) {
-		dstObj[key] = srcObj[key]
+		if (isObject(dstObj[key])) {
+			mergeNodes(dstObj[key], srcObj[key])
+		} else {
+			dstObj[key] = srcObj[key]
+		}
 	}
 
 	delete srcParentObj[srcField]
+}
+
+const mergeNodes = (dst, src) => {
+	for (const k in src) {
+		if (isObject(dst[k]) && isObject(src[k])) {
+			mergeNodes(dst[k], src[k])
+		} else {
+			dst[k] = src[k]
+		}
+	}
+
+	return dst
+}
+
+const isObject = (v) => {
+	return !!v && typeof v === 'object' && !Array.isArray(v)
 }
 
 export const apply = (nodes, path, func) => {
