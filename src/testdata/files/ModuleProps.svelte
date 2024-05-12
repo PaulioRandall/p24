@@ -1,9 +1,15 @@
 <script context="module">
-	//P24.module.const.abc: 123
-	export const abc = 'abc'
+	//P24.module.const.alpha: Abra
+	export const alpha = 'ALPHA'
 
-	//P24.module.let.xyz: 789
-	export let xyz = 'xyz'
+	//P24.m.c.bravo: Bellsprout
+	export const bravo = 'BRAVO'
+
+	//P24.module.let.charlie: Clefairy
+	export const charlie = 'CHARLIE'
+
+	//P24.m.l.delta: Diglett
+	export let delta = 'DELTA'
 </script>
 
 <div />

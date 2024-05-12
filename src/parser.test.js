@@ -227,10 +227,12 @@ describe('p24', () => {
 			expNodes.name = 'ModuleProps'
 			expNodes.module = {
 				const: {
-					abc: '123',
+					alpha: 'Abra',
+					bravo: 'Bellsprout',
 				},
 				let: {
-					xyz: '789',
+					charlie: 'Clefairy',
+					delta: 'Diglett',
 				},
 			}
 
@@ -250,10 +252,12 @@ describe('p24', () => {
 			expNodes.name = 'Props'
 			expNodes.props = {
 				const: {
-					abc: '123',
+					alpha: 'Abra',
+					bravo: 'Bellsprout',
 				},
 				let: {
-					xyz: '789',
+					charlie: 'Clefairy',
+					delta: 'Diglett',
 				},
 			}
 
