@@ -24,15 +24,6 @@ const parseToUnix = (f) => {
 }
 
 describe('p24', () => {
-	//P24.name:
-	//P24.description:
-	//P24.module.const.<name>:
-	//P24.module.let.<name>:
-	//P24.const.<name>:
-	//P24.let.<name>:
-	//P24.slot.<name>:
-	//P24.context.<name>:
-
 	const INPUT_NODES_SCHEMA = {
 		name: '',
 		description: '',
@@ -40,8 +31,10 @@ describe('p24', () => {
 			const: {},
 			let: {},
 		},
-		const: {},
-		let: {},
+		prop: {
+			const: {},
+			let: {},
+		},
 		slot: {},
 		context: {},
 		default: {
@@ -51,8 +44,10 @@ describe('p24', () => {
 				const: {},
 				let: {},
 			},
-			const: {},
-			let: {},
+			prop: {
+				const: {},
+				let: {},
+			},
 			slot: {},
 			context: {},
 		},
@@ -101,7 +96,7 @@ describe('p24', () => {
 	describe('apply', () => {
 		test('applies as expected', () => {
 			const nodes = {
-				props: {
+				prop: {
 					const: {
 						name: '      ',
 					},
@@ -109,8 +104,8 @@ describe('p24', () => {
 			}
 
 			const trim = (s) => s.trim(s)
-			apply(nodes, 'props.const.name', trim)
-			expect(nodes.props.const.name).toEqual('')
+			apply(nodes, 'prop.const.name', trim)
+			expect(nodes.prop.const.name).toEqual('')
 		})
 	})
 
@@ -153,17 +148,19 @@ describe('p24', () => {
 
 		test('cleans props', () => {
 			const nodes = {
-				const: {
-					name: uncleaned,
-				},
-				let: {
-					name: uncleaned,
+				prop: {
+					const: {
+						name: uncleaned,
+					},
+					let: {
+						name: uncleaned,
+					},
 				},
 			}
 
 			formatNodes(nodes)
-			expect(nodes.const.name).toEqual(cleaned)
-			expect(nodes.let.name).toEqual(cleaned)
+			expect(nodes.prop.const.name).toEqual(cleaned)
+			expect(nodes.prop.let.name).toEqual(cleaned)
 		})
 
 		test('cleans slots', () => {

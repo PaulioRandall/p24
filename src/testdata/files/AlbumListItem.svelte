@@ -21,19 +21,19 @@
 	//P24.description:
 	// Details about an album. Designed to be used within a grid or flex grid.
 
-	//P24.const.func: A random function to bind on that does nothing.
-	//P24.default.const.func: {}
+	//P24.prop.const.func: A random function to bind on that does nothing.
+	//P24.default.prop.const.func: {}
 	export const func = () => {}
 
-	//P24.let.title: Title of the album.
+	//P24.prop.let.title: Title of the album.
 	export let title
 
-	//P24.let.artist: Artist or band who created the album.
+	//P24.prop.let.artist: Artist or band who created the album.
 	export let artist
 
-	//P24.let.published:
+	//P24.prop.let.published:
 	// If known, the published date of the album in the format YYYY-MM-DD.
-	//P24.default.let.published: null
+	//P24.default.prop.let.published: null
 	export let published = null
 
 	//P24.context.album-title: See title prop.
