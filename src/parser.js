@@ -10,6 +10,15 @@ import { trim, clean } from './formatters.js'
 //P24.slot.<name>:
 //P24.context.<name>:
 
+//P24.default.name:
+//P24.default.description:
+//P24.default.module.const.<name>:
+//P24.default.module.let.<name>:
+//P24.default.const.<name>:
+//P24.default.let.<name>:
+//P24.default.slot.<name>:
+//P24.default.context.<name>:
+
 export default (src) => {
 	return p23(src, { prefix: 'p24' }).map(formatMeta)
 }
@@ -18,6 +27,7 @@ const formatMeta = (m) => {
 	formatNodes(m.nodes)
 	groupProps(m.nodes)
 	renameSlotToSlots(m.nodes)
+	renameDefaultToDefaults(m.nodes)
 	useDefaultNameIfNameMissing(m.nodes, m.name.split('.')[0])
 	return m
 }
@@ -41,9 +51,23 @@ export const formatNodes = (nodes) => {
 	applyToAll(nodes, 'let', clean)
 	applyToAll(nodes, 'slot', clean)
 	applyToAll(nodes, 'context', clean)
+
+	createMissingNode(nodes, 'default', {})
+	createMissingNode(nodes, 'default.module', {})
+	createMissingNode(nodes, 'default.module.const', {})
+	createMissingNode(nodes, 'default.module.let', {})
+	createMissingNode(nodes, 'default.const', {})
+	createMissingNode(nodes, 'default.let', {})
+	createMissingNode(nodes, 'default.slot', {})
+
+	applyToAll(nodes, 'default.module.const', clean)
+	applyToAll(nodes, 'default.module.let', clean)
+	applyToAll(nodes, 'default.const', clean)
+	applyToAll(nodes, 'default.let', clean)
+	applyToAll(nodes, 'default.slot', clean)
 }
 
-const createMissingNode = (nodes, path, defaultValue) => {
+const createMissingNode = (nodes, path, defaultValue = undefined) => {
 	const [parents, field] = findParentsAndField(path)
 	const parentObj = getParentObject(nodes, parents)
 
@@ -92,11 +116,27 @@ const groupProps = (nodes) => {
 
 	delete nodes.const
 	delete nodes.let
+
+	nodes.default.props = {
+		const: nodes.default.const,
+		let: nodes.default.let,
+	}
+
+	delete nodes.default.const
+	delete nodes.default.let
 }
 
 const renameSlotToSlots = (nodes) => {
 	nodes.slots = nodes.slot
 	delete nodes.slot
+
+	nodes.default.slots = nodes.default.slot
+	delete nodes.default.slot
+}
+
+const renameDefaultToDefaults = (nodes) => {
+	nodes.defaults = nodes.default
+	delete nodes.default
 }
 
 const useDefaultNameIfNameMissing = (nodes, defaultName) => {

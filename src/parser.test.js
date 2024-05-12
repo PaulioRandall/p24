@@ -44,6 +44,18 @@ describe('p24', () => {
 		let: {},
 		slot: {},
 		context: {},
+		default: {
+			name: '',
+			description: '',
+			module: {
+				const: {},
+				let: {},
+			},
+			const: {},
+			let: {},
+			slot: {},
+			context: {},
+		},
 	}
 
 	const OUTPUT_NODES_SCHEMA = {
@@ -59,6 +71,17 @@ describe('p24', () => {
 		},
 		slots: {},
 		context: {},
+		defaults: {
+			module: {
+				const: {},
+				let: {},
+			},
+			props: {
+				const: {},
+				let: {},
+			},
+			slots: {},
+		},
 	}
 
 	describe('findParentsAndField', () => {
@@ -166,36 +189,19 @@ describe('p24', () => {
 	})
 
 	describe('parse', () => {
-		//P24.name:
-		//P24.description:
-		//P24.module.const.<name>:
-		//P24.module.let.<name>:
-		//P24.const.<name>:
-		//P24.let.<name>:
-		//P24.slot.<name>:
-		//P24.context.<name>:
-
 		test('parses component name and description', () => {
 			const file = createSvelteFilePath('NameAndDescription')
 			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'Name and Description Component'
+			expNodes.description =
+				'Just a simple component with a name and description.'
 
 			expect(act).toEqual([
 				{
 					...generateFileFields(file),
-					nodes: {
-						name: 'Name and Description Component',
-						description: 'Just a simple component with a name and description.',
-						module: {
-							const: {},
-							let: {},
-						},
-						props: {
-							const: {},
-							let: {},
-						},
-						slots: {},
-						context: {},
-					},
+					nodes: expNodes,
 				},
 			])
 		})
@@ -203,24 +209,15 @@ describe('p24', () => {
 		test('parses multiline description', () => {
 			const file = createSvelteFilePath('MultilineDescription')
 			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'MultilineDescription'
+			expNodes.description = 'a\n b\n  c'
 
 			expect(act).toEqual([
 				{
 					...generateFileFields(file),
-					nodes: {
-						name: 'MultilineDescription',
-						description: 'a\n b\n  c',
-						module: {
-							const: {},
-							let: {},
-						},
-						props: {
-							const: {},
-							let: {},
-						},
-						slots: {},
-						context: {},
-					},
+					nodes: expNodes,
 				},
 			])
 		})
@@ -228,28 +225,22 @@ describe('p24', () => {
 		test('parses component module props', () => {
 			const file = createSvelteFilePath('ModuleProps')
 			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'ModuleProps'
+			expNodes.module = {
+				const: {
+					abc: '123',
+				},
+				let: {
+					xyz: '789',
+				},
+			}
 
 			expect(act).toEqual([
 				{
 					...generateFileFields(file),
-					nodes: {
-						name: 'ModuleProps',
-						description: '',
-						module: {
-							const: {
-								abc: '123',
-							},
-							let: {
-								xyz: '789',
-							},
-						},
-						props: {
-							const: {},
-							let: {},
-						},
-						slots: {},
-						context: {},
-					},
+					nodes: expNodes,
 				},
 			])
 		})
@@ -257,28 +248,22 @@ describe('p24', () => {
 		test('parses component props', () => {
 			const file = createSvelteFilePath('Props')
 			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'Props'
+			expNodes.props = {
+				const: {
+					abc: '123',
+				},
+				let: {
+					xyz: '789',
+				},
+			}
 
 			expect(act).toEqual([
 				{
 					...generateFileFields(file),
-					nodes: {
-						name: 'Props',
-						description: '',
-						module: {
-							const: {},
-							let: {},
-						},
-						props: {
-							const: {
-								abc: '123',
-							},
-							let: {
-								xyz: '789',
-							},
-						},
-						slots: {},
-						context: {},
-					},
+					nodes: expNodes,
 				},
 			])
 		})
@@ -286,28 +271,19 @@ describe('p24', () => {
 		test('parses component slots', () => {
 			const file = createSvelteFilePath('Slots')
 			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'Slots'
+			expNodes.slots = {
+				default: 'Meh',
+				abc: '123',
+				xyz: '789',
+			}
 
 			expect(act).toEqual([
 				{
 					...generateFileFields(file),
-					nodes: {
-						name: 'Slots',
-						description: '',
-						module: {
-							const: {},
-							let: {},
-						},
-						props: {
-							const: {},
-							let: {},
-						},
-						slots: {
-							default: 'Meh',
-							abc: '123',
-							xyz: '789',
-						},
-						context: {},
-					},
+					nodes: expNodes,
 				},
 			])
 		})
@@ -315,27 +291,18 @@ describe('p24', () => {
 		test('parses component contexts', () => {
 			const file = createSvelteFilePath('Context')
 			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'Context'
+			expNodes.context = {
+				'a-b-c': '123',
+				'x-y-z': '789',
+			}
 
 			expect(act).toEqual([
 				{
 					...generateFileFields(file),
-					nodes: {
-						name: 'Context',
-						description: '',
-						module: {
-							const: {},
-							let: {},
-						},
-						props: {
-							const: {},
-							let: {},
-						},
-						slots: {},
-						context: {
-							'a-b-c': '123',
-							'x-y-z': '789',
-						},
-					},
+					nodes: expNodes,
 				},
 			])
 		})
@@ -350,7 +317,7 @@ describe('p24', () => {
 					nodes: {
 						name: 'AlbumListItem',
 						description:
-							'Details about an album. Designed to be used within a grid or flex grid.',
+							'Details about an album. Designed to be used within a\ngrid or flex grid.',
 						module: {
 							const: {
 								genres: 'List of allowable genres.',
@@ -367,7 +334,7 @@ describe('p24', () => {
 								title: 'Title of the album.',
 								artist: 'Artist or band who created the album.',
 								published:
-									'If known, the published date of the album in the format YYYY-MM-DD.',
+									'If known, the published date of the album in the\nformat YYYY-MM-DD.',
 							},
 						},
 						slots: {
@@ -376,6 +343,23 @@ describe('p24', () => {
 						context: {
 							'album-title': 'See title prop.',
 							'album-artist': 'See artist prop.',
+						},
+						defaults: {
+							module: {
+								const: {},
+								let: {},
+							},
+							props: {
+								const: {
+									func: '{}',
+								},
+								let: {
+									published: 'null',
+								},
+							},
+							slots: {
+								default: '"No description".',
+							},
 						},
 					},
 				},

@@ -16,9 +16,11 @@
 	import { setContext } from 'svelte'
 
 	//P24.name: AlbumListItem
-	//P24.description: Details about an album. Designed to be used within a grid or flex grid.
+	//P24.description: Details about an album. Designed to be used within a
+	// grid or flex grid.
 
 	//P24.const.func: A random function to bind on that does nothing.
+	//P24.default.const.func: {}
 	export const func = () => {}
 
 	//P24.let.title: Title of the album.
@@ -27,10 +29,10 @@
 	//P24.let.artist: Artist or band who created the album.
 	export let artist
 
-	//P24.let.published: If known, the published date of the album in the format YYYY-MM-DD.
+	//P24.let.published: If known, the published date of the album in the
+	// format YYYY-MM-DD.
+	//P24.default.let.published: null
 	export let published = null
-
-	//P24.slot.default: A description of the album.
 
 	//P24.context.album-title: See title prop.
 	setContext('album-title', title)
@@ -45,7 +47,11 @@
 	{#if published}
 		<p><b>Published:</b> {formatDate(published)}</p>
 	{/if}
-	<slot />
+	<!--P24.slot.default: A description of the album. -->
+	<!--P24.default.slot.default: "No description". -->
+	<slot>
+		No description.
+	</slot>
 </div>
 
 <style>
