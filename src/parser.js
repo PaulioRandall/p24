@@ -11,29 +11,18 @@ import { trim, clean } from './formatters.js'
 //P24.context.<name>:
 
 export default (src) => {
-	return p23(src, { prefix: 'p24' }) //
-		.map(formatNodes)
-		.map(useFilenameIfNameMissing)
-		.map(groupProps)
-		.map(renameSlotToSlots)
+	return p23(src, { prefix: 'p24' }).map(formatMeta)
 }
 
-export const formatNodes = (meta) => {
-	createMissingNodes(meta.nodes)
-
-	apply(meta.nodes, 'name', trim)
-	apply(meta.nodes, 'description', clean)
-	applyToAll(meta.nodes, 'module.const', clean)
-	applyToAll(meta.nodes, 'module.let', clean)
-	applyToAll(meta.nodes, 'const', clean)
-	applyToAll(meta.nodes, 'let', clean)
-	applyToAll(meta.nodes, 'slot', clean)
-	applyToAll(meta.nodes, 'context', clean)
-
-	return meta
+const formatMeta = (m) => {
+	formatNodes(m.nodes)
+	groupProps(m.nodes)
+	renameSlotToSlots(m.nodes)
+	useDefaultNameIfNameMissing(m.nodes, m.name.split('.')[0])
+	return m
 }
 
-const createMissingNodes = (nodes) => {
+export const formatNodes = (nodes) => {
 	createMissingNode(nodes, 'name', '')
 	createMissingNode(nodes, 'description', '')
 	createMissingNode(nodes, 'module', {})
@@ -43,15 +32,20 @@ const createMissingNodes = (nodes) => {
 	createMissingNode(nodes, 'let', {})
 	createMissingNode(nodes, 'slot', {})
 	createMissingNode(nodes, 'context', {})
+
+	apply(nodes, 'name', trim)
+	apply(nodes, 'description', clean)
+	applyToAll(nodes, 'module.const', clean)
+	applyToAll(nodes, 'module.let', clean)
+	applyToAll(nodes, 'const', clean)
+	applyToAll(nodes, 'let', clean)
+	applyToAll(nodes, 'slot', clean)
+	applyToAll(nodes, 'context', clean)
 }
 
 const createMissingNode = (nodes, path, defaultValue) => {
 	const [parents, field] = findParentsAndField(path)
 	const parentObj = getParentObject(nodes, parents)
-
-	if (!parentObj) {
-		console.log(path, parents, field)
-	}
 
 	if (!(field in parentObj)) {
 		parentObj[field] = defaultValue
@@ -90,27 +84,23 @@ const getParentObject = (nodes, path) => {
 	return parent
 }
 
-const useFilenameIfNameMissing = (meta) => {
-	if (!meta.nodes.name) {
-		meta.nodes.name = meta.name.split('.')[0]
-	}
-	return meta
-}
-
-const groupProps = (meta) => {
-	meta.nodes.props = {
-		const: meta.nodes.const,
-		let: meta.nodes.let,
+const groupProps = (nodes) => {
+	nodes.props = {
+		const: nodes.const,
+		let: nodes.let,
 	}
 
-	delete meta.nodes.const
-	delete meta.nodes.let
-
-	return meta
+	delete nodes.const
+	delete nodes.let
 }
 
-const renameSlotToSlots = (meta) => {
-	meta.nodes.slots = meta.nodes.slot
-	delete meta.nodes.slot
-	return meta
+const renameSlotToSlots = (nodes) => {
+	nodes.slots = nodes.slot
+	delete nodes.slot
+}
+
+const useDefaultNameIfNameMissing = (nodes, defaultName) => {
+	if (!nodes.name) {
+		nodes.name = defaultName
+	}
 }
