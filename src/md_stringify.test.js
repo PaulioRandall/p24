@@ -2,6 +2,18 @@ import mdStringify from './md_stringify.js'
 
 const lines = (...lines) => lines.join('\n')
 
+const EMPTY_DEFAULTS = {
+	module: {
+		const: {},
+		let: {},
+	},
+	props: {
+		const: {},
+		let: {},
+	},
+	slots: {},
+}
+
 describe('md_stringify.js', () => {
 	test('With name & description', () => {
 		const node = {
@@ -19,6 +31,7 @@ describe('md_stringify.js', () => {
 		const node = {
 			name: 'Component',
 			props: {},
+			defaults: EMPTY_DEFAULTS,
 		}
 
 		const act = mdStringify(node)
@@ -41,6 +54,17 @@ describe('md_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
+			defaults: {
+				module: {
+					const: {
+						bravo: 'null',
+					},
+					let: {
+						delta: 'true',
+						echo: '69',
+					},
+				},
+			},
 		}
 
 		const act = mdStringify(node)
@@ -53,16 +77,16 @@ describe('md_stringify.js', () => {
 			'\texport const alpha',
 			'',
 			'\t// Bravo docs',
-			'\texport const bravo',
+			'\texport const bravo = null',
 			'',
 			'\t// Charlie docs',
 			'\texport let charlie',
 			'',
 			'\t// Delta docs',
-			'\texport let delta',
+			'\texport let delta = true',
 			'',
 			'\t// Echo docs',
-			'\texport let echo',
+			'\texport let echo = 69',
 			'</script>',
 			'```'
 		)
@@ -84,6 +108,22 @@ describe('md_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
+			defaults: {
+				module: {
+					const: {},
+					let: {},
+				},
+				props: {
+					const: {
+						bravo: '"abc"',
+					},
+					let: {
+						delta: 'true',
+						echo: '69',
+					},
+				},
+				slots: {},
+			},
 		}
 
 		const act = mdStringify(node)
@@ -96,16 +136,16 @@ describe('md_stringify.js', () => {
 			'\texport const alpha',
 			'',
 			'\t// Bravo docs',
-			'\texport const bravo',
+			'\texport const bravo = "abc"',
 			'',
 			'\t// Charlie docs',
 			'\texport let charlie',
 			'',
 			'\t// Delta docs',
-			'\texport let delta',
+			'\texport let delta = true',
 			'',
 			'\t// Echo docs',
-			'\texport let echo',
+			'\texport let echo = 69',
 			'</script>',
 			'```'
 		)
@@ -121,6 +161,7 @@ describe('md_stringify.js', () => {
 					alpha: '{\n\ta\n\tb\n\tc\n}',
 				},
 			},
+			defaults: EMPTY_DEFAULTS,
 		}
 
 		const act = mdStringify(node)
@@ -150,6 +191,20 @@ describe('md_stringify.js', () => {
 				abc: '456',
 				xyz: '789',
 			},
+			defaults: {
+				module: {
+					const: {},
+					let: {},
+				},
+				props: {
+					const: {},
+					let: {},
+				},
+				slots: {
+					abc: 'ABC',
+					xyz: 'XYZ',
+				},
+			},
 		}
 
 		const act = mdStringify(node)
@@ -161,9 +216,11 @@ describe('md_stringify.js', () => {
 			'<slot />',
 			'',
 			'<!-- 456 -->',
+			'<!-- Default: ABC -->',
 			'<slot name="abc" />',
 			'',
 			'<!-- 789 -->',
+			'<!-- Default: XYZ -->',
 			'<slot name="xyz" />',
 			'```'
 		)
@@ -178,6 +235,7 @@ describe('md_stringify.js', () => {
 				'a-b-c': 'Abc',
 				'x-y-z': 'Xyz',
 			},
+			defaults: EMPTY_DEFAULTS,
 		}
 
 		const act = mdStringify(node)
@@ -232,6 +290,17 @@ describe('md_stringify.js', () => {
 			context: {
 				'a-b-c': 'abc ctx',
 				'x-y-z': 'xyz ctx',
+			},
+			defaults: {
+				module: {
+					const: {},
+					let: {},
+				},
+				props: {
+					const: {},
+					let: {},
+				},
+				slots: {},
 			},
 		}
 

@@ -49,7 +49,7 @@ export default (node) => {
 
 	if (hasModuleProps) {
 		sb.line(`<script context="module">`)
-		appendProps(sb, node.module)
+		appendProps(sb, node.module, node.defaults.module)
 		sb.line('</script>')
 	}
 
@@ -62,7 +62,7 @@ export default (node) => {
 	}
 
 	if (hasProps) {
-		appendProps(sb, node.props)
+		appendProps(sb, node.props, node.defaults.props)
 	}
 
 	if (hasProps && hasContext) {
@@ -82,7 +82,7 @@ export default (node) => {
 	}
 
 	if (hasSlots) {
-		appendSlots(sb, node.slots)
+		appendSlots(sb, node.slots, node.defaults.slots)
 	}
 
 	if (hasAnyHtml) {
@@ -92,12 +92,12 @@ export default (node) => {
 	return sb.toString()
 }
 
-const appendProps = (sb, props) => {
+const appendProps = (sb, props, defaults) => {
 	const hasConstProps = has(props.const)
 	const hasLetProps = has(props.let)
 
 	if (hasConstProps) {
-		appendQualifiedProps(sb, 'const', props.const)
+		appendQualifiedProps(sb, 'const', props.const, defaults.const)
 	}
 
 	if (hasConstProps && hasLetProps) {
@@ -105,11 +105,11 @@ const appendProps = (sb, props) => {
 	}
 
 	if (hasLetProps) {
-		appendQualifiedProps(sb, 'let', props.let)
+		appendQualifiedProps(sb, 'let', props.let, defaults.let)
 	}
 }
 
-const appendQualifiedProps = (sb, qualifier, props) => {
+const appendQualifiedProps = (sb, qualifier, props, defaults) => {
 	const entries = Object.entries(props)
 
 	for (let i = 0; i < entries.length; i++) {
@@ -118,7 +118,14 @@ const appendQualifiedProps = (sb, qualifier, props) => {
 		}
 
 		appendJsComment(sb, entries[i][1])
-		sb.line(`\texport ${qualifier} ${entries[i][0]}`)
+
+		if (defaults[entries[i][0]]) {
+			sb.line(
+				`\texport ${qualifier} ${entries[i][0]} = ${defaults[entries[i][0]]}`
+			)
+		} else {
+			sb.line(`\texport ${qualifier} ${entries[i][0]}`)
+		}
 	}
 }
 
@@ -143,7 +150,7 @@ const appendJsComment = (sb, comment) => {
 	}
 }
 
-const appendSlots = (sb, slots) => {
+const appendSlots = (sb, slots, defaults) => {
 	const entries = Object.entries(slots)
 
 	for (let i = 0; i < entries.length; i++) {
@@ -152,6 +159,9 @@ const appendSlots = (sb, slots) => {
 		}
 
 		appendHtmlComment(sb, entries[i][1])
+		if (defaults[entries[i][0]]) {
+			appendHtmlComment(sb, 'Default: ' + defaults[entries[i][0]])
+		}
 
 		if (entries[i][0] === 'default') {
 			sb.line(`<slot />`)

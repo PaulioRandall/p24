@@ -317,7 +317,7 @@ describe('p24', () => {
 					nodes: {
 						name: 'AlbumListItem',
 						description:
-							'Details about an album. Designed to be used within a\ngrid or flex grid.',
+							'Details about an album. Designed to be used within a grid or flex grid.',
 						module: {
 							const: {
 								genres: 'List of allowable genres.',
@@ -334,7 +334,7 @@ describe('p24', () => {
 								title: 'Title of the album.',
 								artist: 'Artist or band who created the album.',
 								published:
-									'If known, the published date of the album in the\nformat YYYY-MM-DD.',
+									'If known, the published date of the album in the format YYYY-MM-DD.',
 							},
 						},
 						slots: {
