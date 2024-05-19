@@ -16,7 +16,7 @@ const generateFileFields = (file) => {
 }
 
 const parseToUnix = (f) => {
-	return parse(f).map((m) => {
+	return parse({ glob: f }).map((m) => {
 		m.relPath = upath.toUnix(m.relPath)
 		m.absPath = upath.toUnix(m.absPath)
 		return m

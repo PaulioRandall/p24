@@ -32,8 +32,17 @@ import { trim, clean } from './formatters.js'
 //P24.d.p.l.<name>:
 //P24.d.s.<name>:
 
-export default (src) => {
-	return p23(src, { prefix: 'p24' }).map(formatMeta)
+export default (options = {}) => {
+	options = parseOptions(options)
+	return p23(options).map(formatMeta)
+}
+
+const parseOptions = (userOptions) => {
+	return {
+		// glob: '**/*.svelte',
+		prefix: 'p24',
+		...userOptions,
+	}
 }
 
 const formatMeta = (m) => {
