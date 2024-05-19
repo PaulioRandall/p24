@@ -1,4 +1,4 @@
-import p23 from 'p23'
+import p23, { cleanFileNode } from 'p23'
 import { trim, clean } from './formatters.js'
 
 //P24.name:
@@ -34,13 +34,13 @@ import { trim, clean } from './formatters.js'
 
 export default (options = {}) => {
 	options = parseOptions(options)
-	return p23(options).map(formatMeta)
+	return p23(options).map(cleanFileNode).map(formatMeta)
 }
 
 const parseOptions = (userOptions) => {
 	return {
 		// glob: '**/*.svelte',
-		prefix: 'p24',
+		prefix: 'p24.',
 		...userOptions,
 	}
 }
@@ -147,11 +147,13 @@ const applyNodeMerge = (nodes, src, dst) => {
 	const srcParentObj = getParentObject(nodes, srcParents)
 	const srcObj = srcParentObj[srcField]
 
-	for (const key in srcObj) {
-		if (isObject(dstObj[key])) {
-			mergeNodes(dstObj[key], srcObj[key])
-		} else {
-			dstObj[key] = srcObj[key]
+	if (srcObj) {
+		for (const key in srcObj) {
+			if (isObject(dstObj[key])) {
+				mergeNodes(dstObj[key], srcObj[key])
+			} else {
+				dstObj[key] = srcObj[key]
+			}
 		}
 	}
 

@@ -119,13 +119,17 @@ const appendQualifiedProps = (sb, qualifier, props, defaults) => {
 
 		appendJsComment(sb, entries[i][1])
 
-		if (defaults[entries[i][0]]) {
-			sb.line(
-				`\texport ${qualifier} ${entries[i][0]} = ${defaults[entries[i][0]]}`
-			)
-		} else {
-			sb.line(`\texport ${qualifier} ${entries[i][0]}`)
+		let line = `\texport ${qualifier} ${entries[i][0]}`
+		const value = defaults[entries[i][0]] || ''
+
+		if (value) {
+			if (!value.startsWith('//') && !value.startsWith('/*')) {
+				line += ` =`
+			}
+			line += ` ${value}`
 		}
+
+		sb.line(line)
 	}
 }
 
