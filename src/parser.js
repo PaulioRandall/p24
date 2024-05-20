@@ -9,6 +9,7 @@ import { trim, clean } from './formatters.js'
 //P24.props.let.<name>:
 //P24.slot.<name>:
 //P24.context.<name>:
+//P24.events.<name>:
 
 //P24.name:
 //P24.desc:
@@ -19,6 +20,7 @@ import { trim, clean } from './formatters.js'
 //P24.s.<name>:
 //P24.ctx.<name>:
 //P24.c.<name>:
+//P24.e.<name>:
 
 //P24.default.module.const.<name>:
 //P24.default.module.let.<name>:
@@ -49,6 +51,7 @@ const formatMeta = (m) => {
 	formatNodes(m.nodes)
 	renamePropToProps(m.nodes)
 	renameSlotToSlots(m.nodes)
+	renameEventToEvents(m.nodes)
 	renameDefaultToDefaults(m.nodes)
 	useDefaultNameIfNameMissing(m.nodes, m.name.split('.')[0])
 	return m
@@ -113,6 +116,11 @@ export const formatNodes = (nodes) => {
 	applyNodeMerge(nodes, 'c', 'context')
 	applyNodeMerge(nodes, 'ctx', 'context')
 	applyToAll(nodes, 'context', clean)
+
+	createMissingNode(nodes, 'event', {})
+	applyNodeMerge(nodes, 'e', 'event')
+	applyNodeMerge(nodes, 'on', 'event')
+	applyToAll(nodes, 'event', clean)
 }
 
 const createMissingNode = (nodes, path, defaultValue = undefined) => {
@@ -222,6 +230,11 @@ const renameSlotToSlots = (nodes) => {
 
 	nodes.default.slots = nodes.default.slot
 	delete nodes.default.slot
+}
+
+const renameEventToEvents = (nodes) => {
+	nodes.events = nodes.event
+	delete nodes.event
 }
 
 const renameDefaultToDefaults = (nodes) => {

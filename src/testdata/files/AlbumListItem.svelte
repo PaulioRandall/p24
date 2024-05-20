@@ -16,6 +16,9 @@
 
 <script>
 	import { setContext } from 'svelte'
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	//P24.name: AlbumListItem
 	//P24.desc:
@@ -41,9 +44,18 @@
 
 	//P24.c.album-artist: See artist prop.
 	setContext('album-title', artist)
+
+	//p24.on.selected: Fired when this item is selected.
+	const selected = () => {
+		dispatch('selected', {
+			title,
+			artist,
+			published,
+		});
+	}
 </script>
 
-<div class="album-list-item">
+<div class="album-list-item" on:click={selected}>
 	<h2>{title}</h2>
 	<p><b>Artist:</b>{artist}</p>
 	{#if published}

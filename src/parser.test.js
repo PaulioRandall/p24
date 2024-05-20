@@ -39,6 +39,7 @@ describe('p24', () => {
 		},
 		slot: {}, // 's'
 		context: {}, // 'c'
+		on: {},
 		default: {
 			// 'd'
 			name: '',
@@ -71,6 +72,7 @@ describe('p24', () => {
 		},
 		slots: {},
 		context: {},
+		events: {},
 		defaults: {
 			module: {
 				const: {},
@@ -313,6 +315,25 @@ describe('p24', () => {
 			])
 		})
 
+		test('parses component events', () => {
+			const file = createSvelteFilePath('Event')
+			const act = parseToUnix(file)
+			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
+
+			expNodes.name = 'Event'
+			expNodes.events = {
+				custom: 'Eat my shorts.',
+				another: 'Dental plan! Lisa needs braces!',
+			}
+
+			expect(act).toEqual([
+				{
+					...generateFileFields(file),
+					nodes: expNodes,
+				},
+			])
+		})
+
 		test('parses fully documented component', () => {
 			const file = createSvelteFilePath('AlbumListItem')
 			const act = parseToUnix(file)
@@ -349,6 +370,9 @@ describe('p24', () => {
 						context: {
 							'album-title': 'See title prop.',
 							'album-artist': 'See artist prop.',
+						},
+						events: {
+							selected: 'Fired when this item is selected.',
 						},
 						defaults: {
 							module: {
