@@ -9,7 +9,7 @@ export default function (options = {}) {
 		prefix: 'p24.', //
 		glob: 'dist/*.svelte',
 		globOptions: undefined,
-		templateReadme: './README.template.md',
+		template: './README.template.md',
 		placeholder: '{{DOCS}}',
 		...options,
 	}
@@ -17,7 +17,7 @@ export default function (options = {}) {
 	const components = parse(options)
 	const docs = composeDocs(components)
 
-	const templateFile = path.resolve(options.templateReadme)
+	const templateFile = path.resolve(options.template)
 	const content = //
 		readFile(templateFile).replace(options.placeholder, docs)
 
