@@ -4,10 +4,11 @@ import { program } from 'commander'
 import { renderReadme } from 'p24'
 
 const options = program //
-	.option('--pre, --prefix <string>')
+	.option('-p, --prefix <string>')
 	.option('-g, --glob <string>')
 	.option('-t, --template <string>')
-	.option('-p, --placeholder <string>')
+	.option('-o, --output <string>')
+	.option('-s, --placeholder <string>')
 	.parse()
 	.opts()
 

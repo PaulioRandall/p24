@@ -7,9 +7,10 @@ import mdStringify from './md_stringify.js'
 export default function (options = {}) {
 	options = {
 		prefix: 'p24.', //
-		glob: 'dist/*.svelte',
+		glob: '**/*.svelte',
 		globOptions: undefined,
 		template: './README.template.md',
+		output: './README.md',
 		placeholder: '{{DOCS}}',
 		...options,
 	}
@@ -19,9 +20,10 @@ export default function (options = {}) {
 
 	const templateFile = path.resolve(options.template)
 	const content = //
-		readFile(templateFile).replace(options.placeholder, docs)
+		readFile(templateFile) //
+			.replace(options.placeholder, docs)
 
-	const realFile = path.resolve('./README.md')
+	const realFile = path.resolve(options.output)
 	createOrReplaceFile(realFile, content)
 }
 
@@ -37,7 +39,7 @@ function readFile(file) {
 		return fs.readFileSync(file, { encoding: 'utf-8' })
 	} catch (err) {
 		console.error(`'${file}' could not be read`)
-		throw new Error(err)
+		throw err
 	}
 }
 
@@ -45,7 +47,7 @@ function createOrReplaceFile(file, content) {
 	try {
 		fs.writeFileSync(file, content, { encoding: 'utf-8' })
 	} catch (err) {
-		console.error(err)
-		throw new Error(`'${file}' could not be written to`)
+		console.error(`'${file}' could not be written to`)
+		throw err
 	}
 }
