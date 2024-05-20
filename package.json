@@ -4,7 +4,7 @@
 	"description": "Simple tool for documenting Svelte components via P23.",
 	"type": "module",
 	"license": "MIT",
-	"version": "0.11.0",
+	"version": "0.12.0",
 	"engines": {
 		"node": ">=18"
 	},
@@ -22,6 +22,9 @@
 		"./package.json": "./package.json",
 		".": "./src/index.js"
 	},
+	"bin": {
+		"p24": "./src/render_readme_cli.js"
+	},
 	"scripts": {
 		"fmt": "prettier --log-level warn --write .",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
@@ -33,6 +36,7 @@
 		"upath": "2.0.1"
 	},
 	"dependencies": {
-		"p23": "^0.9.0"
+		"p23": "^0.9.0",
+		"commander": "^12.1.0"
 	}
 }
