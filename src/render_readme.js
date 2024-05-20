@@ -11,7 +11,7 @@ export default function (options = {}) {
 		globOptions: undefined,
 		template: './README.template.md',
 		output: './README.md',
-		placeholder: '{{DOCS}}',
+		placeholder: '{{PLACEHOLDER}}',
 		...options,
 	}
 
