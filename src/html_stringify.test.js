@@ -11,16 +11,16 @@ describe('html_stringify.js', () => {
 		const act = htmlStringify(node)
 		const exp = lines(
 			'```svelte',
-			'<Component>', //
+			'<Component />', //
 			'```'
 		)
 
 		expect(act).toEqual(exp)
 	})
 
-	test('Name only', () => {
+	test('With props', () => {
 		const node = {
-			name: 'Component',
+			name: 'Props',
 			props: {
 				const: {
 					alpha: 'Alpha docs',
@@ -48,12 +48,42 @@ describe('html_stringify.js', () => {
 		const act = htmlStringify(node)
 		const exp = lines(
 			'```svelte',
-			'<Component', //
+			'<Props', //
 			'  bind:alpha',
 			'  bind:bravo={null}',
 			'  charlie',
 			'  delta={true}',
-			'  echo={69}>',
+			'  echo={69} />',
+			'```'
+		)
+
+		expect(act).toEqual(exp)
+	})
+
+	test('With slots', () => {
+		const node = {
+			name: 'Slots',
+			slots: {
+				default: 'Meh',
+				alpha: 'Alpha docs',
+				bravo: 'Bravo docs',
+			},
+			defaults: {
+				slots: {
+					alpha: 'Alpha default',
+					bravo: 'Bravo default',
+				},
+			},
+		}
+
+		const act = htmlStringify(node)
+		const exp = lines(
+			'```svelte',
+			'<Slots>', //
+			'  <template />',
+			'  <template slot="alpha" />',
+			'  <template slot="bravo" />',
+			'</Slots>',
 			'```'
 		)
 

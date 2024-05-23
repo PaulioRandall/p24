@@ -15,7 +15,17 @@ export default (node) => {
 		appendProps(sb, node.props.let, node.defaults.props.let)
 	}
 
-	sb.line('>')
+	if (node?.slots && Object.keys(node.slots).length > 0) {
+		sb.append('>')
+		appendSlots(sb, node.slots)
+		sb.line()
+		sb.append('</')
+		sb.append(node.name)
+		sb.line('>')
+	} else {
+		sb.line(' />')
+	}
+
 	sb.line('```')
 
 	return sb.toString()
@@ -42,5 +52,20 @@ const appendProps = (sb, props, defaults, prefix = '') => {
 			sb.append(def)
 			sb.append('}')
 		}
+	}
+}
+
+const appendSlots = (sb, slots) => {
+	for (const name in slots) {
+		sb.line()
+		sb.append('  <template')
+
+		if (name !== 'default') {
+			sb.append(' slot="')
+			sb.append(name)
+			sb.append('"')
+		}
+
+		sb.append(' />')
 	}
 }
