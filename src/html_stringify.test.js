@@ -80,9 +80,9 @@ describe('html_stringify.js', () => {
 		const exp = lines(
 			'```svelte',
 			'<Slots>', //
-			'  <template />',
-			'  <template slot="alpha" />',
-			'  <template slot="bravo" />',
+			'  <tag />',
+			'  <tag slot="alpha" />',
+			'  <tag slot="bravo" />',
 			'</Slots>',
 			'```'
 		)

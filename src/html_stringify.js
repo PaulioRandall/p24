@@ -58,7 +58,7 @@ const appendProps = (sb, props, defaults, prefix = '') => {
 const appendSlots = (sb, slots) => {
 	for (const name in slots) {
 		sb.line()
-		sb.append('  <template')
+		sb.append('  <tag')
 
 		if (name !== 'default') {
 			sb.append(' slot="')
