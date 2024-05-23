@@ -3,6 +3,7 @@ import fs from 'fs'
 
 import parse from './parser.js'
 import mdStringify from './md_stringify.js'
+import htmlStringify from './html_stringify.js'
 
 export default function (options = {}) {
 	options = {
@@ -30,7 +31,11 @@ export default function (options = {}) {
 function composeDocs(components) {
 	return components //
 		.map((c) => c.nodes)
-		.map(mdStringify)
+		.map((n) => [
+			mdStringify(n), //
+			htmlStringify(n),
+		])
+		.flat()
 		.join('\n\n')
 }
 

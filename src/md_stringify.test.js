@@ -71,7 +71,7 @@ describe('md_stringify.js', () => {
 		const exp = lines(
 			'### `<Component>`',
 			'',
-			'```html',
+			'```svelte',
 			'<script context="module">',
 			'\t// Alpha docs',
 			'\texport const alpha',
@@ -130,7 +130,7 @@ describe('md_stringify.js', () => {
 		const exp = lines(
 			'### `<Component>`',
 			'',
-			'```html',
+			'```svelte',
 			'<script>',
 			'\t// Alpha docs',
 			'\texport const alpha',
@@ -168,7 +168,7 @@ describe('md_stringify.js', () => {
 		const exp = lines(
 			'### `<Component>`',
 			'',
-			'```html',
+			'```svelte',
 			'<script>',
 			'\t// {',
 			'\t// 	a',
@@ -211,7 +211,7 @@ describe('md_stringify.js', () => {
 		const exp = lines(
 			'### `<Component>`',
 			'',
-			'```html',
+			'```svelte',
 			'<!-- 123 -->',
 			'<slot />',
 			'',
@@ -242,7 +242,7 @@ describe('md_stringify.js', () => {
 		const exp = lines(
 			'### `<Component>`',
 			'',
-			'```html',
+			'```svelte',
 			'<script>',
 			'\t// Abc',
 			"\tsetContext('a-b-c', ...)",
@@ -310,7 +310,7 @@ describe('md_stringify.js', () => {
 			'',
 			'Message.',
 			'',
-			'```html',
+			'```svelte',
 			'<script context="module">',
 			'\t// Alpha docs',
 			'\t// Another line',

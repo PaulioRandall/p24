@@ -1,20 +1,4 @@
-function StringBuilder() {
-	let lines = []
-
-	this.line = (s) => {
-		lines.push(s)
-	}
-
-	this.gap = () => {
-		lines.push('')
-	}
-
-	this.toString = () => {
-		return lines.join('\n').trim()
-	}
-
-	return this
-}
+import StringBuilder from './StringBuilder.js'
 
 function has(obj) {
 	return !!obj && !!Object.keys(obj).length > 0
@@ -32,19 +16,19 @@ export default (node) => {
 	const hasAnyHtml = hasModuleProps || hasProps || hasSlots || hasContext
 
 	if (!node.description && !hasAnyHtml) {
-		sb.gap()
+		sb.line()
 		sb.line('> No documentation.')
 		return sb.toString()
 	}
 
 	if (node.description) {
-		sb.gap()
+		sb.line()
 		sb.line(node.description)
 	}
 
 	if (hasAnyHtml) {
-		sb.gap()
-		sb.line('```html')
+		sb.line()
+		sb.line('```svelte')
 	}
 
 	if (hasModuleProps) {
@@ -54,7 +38,7 @@ export default (node) => {
 	}
 
 	if (hasModuleProps && (hasProps || hasSlots || hasContext)) {
-		sb.gap()
+		sb.line()
 	}
 
 	if (hasProps || hasContext) {
@@ -66,7 +50,7 @@ export default (node) => {
 	}
 
 	if (hasProps && hasContext) {
-		sb.gap()
+		sb.line()
 	}
 
 	if (hasContext) {
@@ -78,7 +62,7 @@ export default (node) => {
 	}
 
 	if ((hasProps || hasContext) && hasSlots) {
-		sb.gap()
+		sb.line()
 	}
 
 	if (hasSlots) {
@@ -101,7 +85,7 @@ const appendProps = (sb, props, defaults) => {
 	}
 
 	if (hasConstProps && hasLetProps) {
-		sb.gap()
+		sb.line()
 	}
 
 	if (hasLetProps) {
@@ -114,7 +98,7 @@ const appendQualifiedProps = (sb, qualifier, props, defaults) => {
 
 	for (let i = 0; i < entries.length; i++) {
 		if (i !== 0) {
-			sb.gap()
+			sb.line()
 		}
 
 		appendJsComment(sb, entries[i][1])
@@ -138,7 +122,7 @@ const appendContext = (sb, context) => {
 
 	for (let i = 0; i < entries.length; i++) {
 		if (i !== 0) {
-			sb.gap()
+			sb.line()
 		}
 
 		appendJsComment(sb, entries[i][1])
@@ -159,7 +143,7 @@ const appendSlots = (sb, slots, defaults) => {
 
 	for (let i = 0; i < entries.length; i++) {
 		if (i !== 0) {
-			sb.gap()
+			sb.line()
 		}
 
 		appendHtmlComment(sb, entries[i][1])
