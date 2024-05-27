@@ -7,11 +7,11 @@ const EMPTY_DEFAULTS = {
 		const: {},
 		let: {},
 	},
-	props: {
+	prop: {
 		const: {},
 		let: {},
 	},
-	slots: {},
+	slot: {},
 }
 
 describe('md_stringify.js', () => {
@@ -30,8 +30,8 @@ describe('md_stringify.js', () => {
 	test('With no props', () => {
 		const node = {
 			name: 'Component',
-			props: {},
-			defaults: EMPTY_DEFAULTS,
+			prop: {},
+			default: EMPTY_DEFAULTS,
 		}
 
 		const act = mdStringify(node)
@@ -54,7 +54,7 @@ describe('md_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
-			defaults: {
+			default: {
 				module: {
 					const: {
 						bravo: 'null',
@@ -97,7 +97,7 @@ describe('md_stringify.js', () => {
 	test('With const & let props', () => {
 		const node = {
 			name: 'Component',
-			props: {
+			prop: {
 				const: {
 					alpha: 'Alpha docs',
 					bravo: 'Bravo docs',
@@ -108,12 +108,12 @@ describe('md_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
-			defaults: {
+			default: {
 				module: {
 					const: {},
 					let: {},
 				},
-				props: {
+				prop: {
 					const: {
 						bravo: '"abc"',
 					},
@@ -122,7 +122,7 @@ describe('md_stringify.js', () => {
 						echo: '69',
 					},
 				},
-				slots: {},
+				slot: {},
 			},
 		}
 
@@ -156,12 +156,12 @@ describe('md_stringify.js', () => {
 	test('With props that have indented lines', () => {
 		const node = {
 			name: 'Component',
-			props: {
+			prop: {
 				const: {
 					alpha: '{\n\ta\n\tb\n\tc\n}',
 				},
 			},
-			defaults: EMPTY_DEFAULTS,
+			default: EMPTY_DEFAULTS,
 		}
 
 		const act = mdStringify(node)
@@ -186,21 +186,21 @@ describe('md_stringify.js', () => {
 	test('With slots', () => {
 		const node = {
 			name: 'Component',
-			slots: {
+			slot: {
 				default: '123',
 				abc: '456',
 				xyz: '789',
 			},
-			defaults: {
+			default: {
 				module: {
 					const: {},
 					let: {},
 				},
-				props: {
+				prop: {
 					const: {},
 					let: {},
 				},
-				slots: {
+				slot: {
 					abc: 'ABC',
 					xyz: 'XYZ',
 				},
@@ -235,7 +235,7 @@ describe('md_stringify.js', () => {
 				'a-b-c': 'Abc',
 				'x-y-z': 'Xyz',
 			},
-			defaults: EMPTY_DEFAULTS,
+			default: EMPTY_DEFAULTS,
 		}
 
 		const act = mdStringify(node)
@@ -271,7 +271,7 @@ describe('md_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
-			props: {
+			prop: {
 				const: {
 					alpha: 'Alpha docs\nAnother line',
 					bravo: 'Bravo docs',
@@ -282,7 +282,7 @@ describe('md_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
-			slots: {
+			slot: {
 				default: '123\nAnother line',
 				abc: '456',
 				xyz: '789',
@@ -291,16 +291,16 @@ describe('md_stringify.js', () => {
 				'a-b-c': 'abc ctx',
 				'x-y-z': 'xyz ctx',
 			},
-			defaults: {
+			default: {
 				module: {
 					const: {},
 					let: {},
 				},
-				props: {
+				prop: {
 					const: {},
 					let: {},
 				},
-				slots: {},
+				slot: {},
 			},
 		}
 

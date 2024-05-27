@@ -21,7 +21,7 @@ describe('html_stringify.js', () => {
 	test('With props', () => {
 		const node = {
 			name: 'Props',
-			props: {
+			prop: {
 				const: {
 					alpha: 'Alpha docs',
 					bravo: 'Bravo docs',
@@ -32,8 +32,8 @@ describe('html_stringify.js', () => {
 					echo: 'Echo docs',
 				},
 			},
-			defaults: {
-				props: {
+			default: {
+				prop: {
 					const: {
 						bravo: 'null',
 					},
@@ -63,13 +63,13 @@ describe('html_stringify.js', () => {
 	test('With slots', () => {
 		const node = {
 			name: 'Slots',
-			slots: {
+			slot: {
 				default: 'Meh',
 				alpha: 'Alpha docs',
 				bravo: 'Bravo docs',
 			},
-			defaults: {
-				slots: {
+			default: {
+				slot: {
 					alpha: 'Alpha default',
 					bravo: 'Bravo default',
 				},

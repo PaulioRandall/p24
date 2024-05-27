@@ -10,8 +10,8 @@ export default (node) => {
 	sb.line('### ' + '`<' + node.name + '>`')
 
 	const hasModuleProps = has(node.module?.const) || has(node.module?.let)
-	const hasProps = has(node.props?.const) || has(node.props?.let)
-	const hasSlots = has(node.slots)
+	const hasProps = has(node.prop?.const) || has(node.prop?.let)
+	const hasSlots = has(node.slot)
 	const hasContext = has(node.context)
 	const hasAnyHtml = hasModuleProps || hasProps || hasSlots || hasContext
 
@@ -33,7 +33,7 @@ export default (node) => {
 
 	if (hasModuleProps) {
 		sb.line(`<script context="module">`)
-		appendProps(sb, node.module, node.defaults.module)
+		appendProps(sb, node.module, node.default.module)
 		sb.line('</script>')
 	}
 
@@ -46,7 +46,7 @@ export default (node) => {
 	}
 
 	if (hasProps) {
-		appendProps(sb, node.props, node.defaults.props)
+		appendProps(sb, node.prop, node.default.prop)
 	}
 
 	if (hasProps && hasContext) {
@@ -66,7 +66,7 @@ export default (node) => {
 	}
 
 	if (hasSlots) {
-		appendSlots(sb, node.slots, node.defaults.slots)
+		appendSlots(sb, node.slot, node.default.slot)
 	}
 
 	if (hasAnyHtml) {

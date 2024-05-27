@@ -124,6 +124,7 @@ describe('p24', () => {
 			const nodes = {
 				name: ' abc ',
 			}
+
 			formatNodes(nodes)
 			expect(nodes.name).toEqual('abc')
 		})
@@ -132,6 +133,7 @@ describe('p24', () => {
 			const nodes = {
 				description: uncleaned,
 			}
+
 			formatNodes(nodes)
 			expect(nodes.description).toEqual(cleaned)
 		})
@@ -187,6 +189,7 @@ describe('p24', () => {
 					name: uncleaned,
 				},
 			}
+
 			formatNodes(nodes)
 			expect(nodes.context.name).toEqual(cleaned)
 		})

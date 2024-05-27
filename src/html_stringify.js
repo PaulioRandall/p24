@@ -7,17 +7,17 @@ export default (node) => {
 	sb.append('<')
 	sb.append(node.name)
 
-	if (node?.props?.const) {
-		appendProps(sb, node.props.const, node.defaults.props.const, 'bind:')
+	if (node?.prop?.const) {
+		appendProps(sb, node.prop.const, node.default.prop.const, 'bind:')
 	}
 
-	if (node?.props?.let) {
-		appendProps(sb, node.props.let, node.defaults.props.let)
+	if (node?.prop?.let) {
+		appendProps(sb, node.prop.let, node.default.prop.let)
 	}
 
-	if (node?.slots && Object.keys(node.slots).length > 0) {
+	if (node?.slot && Object.keys(node.slot).length > 0) {
 		sb.append('>')
-		appendSlots(sb, node.slots)
+		appendSlots(sb, node.slot)
 		sb.line()
 		sb.append('</')
 		sb.append(node.name)
