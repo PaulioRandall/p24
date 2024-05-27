@@ -166,9 +166,7 @@ present the article preview image.`,
 
 **Options**
 
-Defaults noted as field values. 
-
-For information on glob and glob options see [NPM _glob_ package](https://www.npmjs.com/package/glob) ([Github](https://github.com/isaacs/node-glob)).
+Defaults noted as field values. For information on glob and glob options see [NPM _glob_ package](https://www.npmjs.com/package/glob) ([Github](https://github.com/isaacs/node-glob)).
 
 ```js
 import p24 from 'p24'
@@ -187,15 +185,19 @@ p24.parse({
 
 ### `renderReadme(options = {})`
 
-Parses the documentation then compiles a README from a template with the documentation. By default, a template README file called `README.template.md` is read, placeholder text `{{PLACEHOLDER}}` is swapped out for the rendered documentation, before finally writing the whole thing to `README.md`.
+Parses the documentation then compiles a README from a template with the documentation.
 
-**Example output**
+By default, a template README file called `README.template.md` is read, placeholder text `{{PLACEHOLDER}}` is swapped out for the rendered documentation, before finally writing the whole thing to `README.md`.
+
+Example output for a single component:
 
 ```markdown
+### `<Form>`
+
 Primary component in which fields are slotted into.
 $restProps are passed to the form element (outer component element).
 
-```svelte
+\`\`\`svelte
 <script>
   // Store containing fields referenced by their input names.
   export const fields = writable({})
@@ -242,9 +244,9 @@ $restProps are passed to the form element (outer component element).
 
 <!-- Form fields, buttons, and anything else you fancy. -->
 <slot />
-```
+\`\`\`
 
-```svelte
+\`\`\`svelte
 <Form
   bind:fields={writable({})}
   bind:values={writable({})}
@@ -255,7 +257,7 @@ $restProps are passed to the form element (outer component element).
   submit={null}>
   <template />
 </Form>
-```
+\`\`\`
 ```
 
 **Options**

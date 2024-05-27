@@ -1,5 +1,8 @@
-export { default as renderReadme } from './render_readme.js'
-export { default as parse } from './parser.js'
+import { default as _renderReadme } from './render_readme.js'
+import { default as _parse } from './parser.js'
+
+export const renderReadme = _renderReadme
+export const parse = _parse
 
 export default {
 	parse,
