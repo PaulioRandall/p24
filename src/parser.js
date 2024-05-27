@@ -36,7 +36,10 @@ import { trim, clean } from './formatters.js'
 
 export default (options = {}) => {
 	options = parseOptions(options)
-	return p23(options).map(cleanFileNode).map(formatMeta)
+	return p23(options) //
+		.map(cleanFileNode)
+		.map(oneValuePerNode)
+		.map(formatMeta)
 }
 
 const parseOptions = (userOptions) => {
@@ -44,6 +47,23 @@ const parseOptions = (userOptions) => {
 		// glob: '**/*.svelte',
 		prefix: 'p24.',
 		...userOptions,
+	}
+}
+
+const oneValuePerNode = (m) => {
+	useLastValueInEachNode(m.nodes)
+	return m
+}
+
+const useLastValueInEachNode = (nodes) => {
+	for (const name in nodes) {
+		const n = nodes[name]
+
+		if (isObject(n)) {
+			useLastValueInEachNode(n)
+		} else {
+			nodes[name] = n[n.length-1]
+		}
 	}
 }
 

@@ -14,7 +14,7 @@ Do whatever as long as you adhere to the permissive MIT license found within.
 
 ### `parse(options = {})`
 
-Given the example:
+Given the component:
 
 ```html
 <!--

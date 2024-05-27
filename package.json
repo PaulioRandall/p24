@@ -4,7 +4,7 @@
 	"description": "Simple tool for documenting Svelte components via P23.",
 	"type": "module",
 	"license": "MIT",
-	"version": "0.17.1",
+	"version": "0.18.0",
 	"engines": {
 		"node": ">=18"
 	},
@@ -36,7 +36,7 @@
 		"upath": "2.0.1"
 	},
 	"dependencies": {
-		"p23": "^0.9.0",
+		"p23": "^0.10.0",
 		"commander": "^12.1.0"
 	}
 }
