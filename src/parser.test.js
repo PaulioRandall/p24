@@ -66,23 +66,23 @@ describe('p24', () => {
 			const: {},
 			let: {},
 		},
-		props: {
+		prop: {
 			const: {},
 			let: {},
 		},
-		slots: {},
+		slot: {},
 		context: {},
-		events: {},
-		defaults: {
+		event: {},
+		default: {
 			module: {
 				const: {},
 				let: {},
 			},
-			props: {
+			prop: {
 				const: {},
 				let: {},
 			},
-			slots: {},
+			slot: {},
 		},
 	}
 
@@ -257,7 +257,7 @@ describe('p24', () => {
 			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
 
 			expNodes.name = 'Props'
-			expNodes.props = {
+			expNodes.prop = {
 				const: {
 					alpha: 'Abra',
 					bravo: 'Bellsprout',
@@ -282,7 +282,7 @@ describe('p24', () => {
 			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
 
 			expNodes.name = 'Slots'
-			expNodes.slots = {
+			expNodes.slot = {
 				default: 'Mew',
 				alpha: 'Abra',
 				bravo: 'Bellsprout',
@@ -321,7 +321,7 @@ describe('p24', () => {
 			const expNodes = structuredClone(OUTPUT_NODES_SCHEMA)
 
 			expNodes.name = 'Event'
-			expNodes.events = {
+			expNodes.event = {
 				custom: 'Eat my shorts.',
 				another: 'Dental plan! Lisa needs braces!',
 			}
@@ -353,7 +353,7 @@ describe('p24', () => {
 								formatDate: 'Formats any dates, defaults to DD/MM/YYYY.',
 							},
 						},
-						props: {
+						prop: {
 							const: {
 								func: 'A random function to bind on that does nothing.',
 							},
@@ -364,22 +364,22 @@ describe('p24', () => {
 									'If known, the published date of the album in the format YYYY-MM-DD.',
 							},
 						},
-						slots: {
+						slot: {
 							default: 'A description of the album.',
 						},
 						context: {
 							'album-title': 'See title prop.',
 							'album-artist': 'See artist prop.',
 						},
-						events: {
+						event: {
 							selected: 'Fired when this item is selected.',
 						},
-						defaults: {
+						default: {
 							module: {
 								const: {},
 								let: {},
 							},
-							props: {
+							prop: {
 								const: {
 									func: '{}',
 								},
@@ -387,7 +387,7 @@ describe('p24', () => {
 									published: 'null',
 								},
 							},
-							slots: {
+							slot: {
 								default: '"No description".',
 							},
 						},

@@ -7,7 +7,7 @@
 		'Symphonic Death Metal',
 	]
 
-	//P24.m.l.formatDate:
+	//P24.m.let.formatDate:
 	// Formats any dates, defaults to DD/MM/YYYY.
 	export let formatDate = (date) => {
 		return date.split('-').reverse().join('/')
@@ -28,21 +28,21 @@
 	//P24.default.prop.const.func: {}
 	export const func = () => {}
 
-	//P24.p.l.title: Title of the album.
+	//P24.p.let.title: Title of the album.
 	export let title
 
 	//P24.p.let.artist: Artist or band who created the album.
 	export let artist
 
-	//P24.prop.l.published:
+	//P24.prop.let.published:
 	// If known, the published date of the album in the format YYYY-MM-DD.
-	//P24.d.p.l.published: null
+	//P24.d.p.let.published: null
 	export let published = null
 
 	//P24.context.album-title: See title prop.
 	setContext('album-title', title)
 
-	//P24.c.album-artist: See artist prop.
+	//P24.ctx.album-artist: See artist prop.
 	setContext('album-title', artist)
 
 	//p24.on.selected: Fired when this item is selected.
@@ -62,7 +62,7 @@
 		<p><b>Published:</b> {formatDate(published)}</p>
 	{/if}
 	<!--P24.slot.default: A description of the album. -->
-	<!--P24.d.s.default: "No description". -->
+	<!--P24.d.slot.default: "No description". -->
 	<slot>
 		No description.
 	</slot>
