@@ -191,13 +191,13 @@ By default, a template README file called `README.template.md` is read, placehol
 
 Example output for a single component:
 
-```markdown
+~~~markdown
 ### `<Form>`
 
 Primary component in which fields are slotted into.
 $restProps are passed to the form element (outer component element).
 
-\`\`\`svelte
+```svelte
 <script>
   // Store containing fields referenced by their input names.
   export const fields = writable({})
@@ -244,9 +244,9 @@ $restProps are passed to the form element (outer component element).
 
 <!-- Form fields, buttons, and anything else you fancy. -->
 <slot />
-\`\`\`
+```
 
-\`\`\`svelte
+```svelte
 <Form
   bind:fields={writable({})}
   bind:values={writable({})}
@@ -257,8 +257,8 @@ $restProps are passed to the form element (outer component element).
   submit={null}>
   <template />
 </Form>
-\`\`\`
 ```
+~~~
 
 **Options**
 
