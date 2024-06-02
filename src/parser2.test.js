@@ -14,7 +14,7 @@ const newExpect = () => {
 		name: 'Weatherwax',
 		description: '',
 		props: [],
-		//slots: [],
+		slots: [],
 		//context: [],
 		//events: [],
 	}
@@ -29,6 +29,16 @@ const newProp = (custom) => {
 			const: false,
 			module: false,
 			default: '',
+		},
+		custom
+	)
+}
+
+const newSlot = (custom) => {
+	return Object.assign(
+		{
+			name: 'default',
+			description: '',
 		},
 		custom
 	)
@@ -246,6 +256,43 @@ describe('parser.js', () => {
 					newProp({
 						name: 'first',
 						default: '',
+					})
+				)
+
+				expect(act).toEqual(exp)
+			})
+		})
+
+		describe('slot', () => {
+			test('is parsed with @slot', () => {
+				const act = parse(
+					mockLoad({
+						'@slot': ['The default slot.'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.slots.push(
+					newSlot({
+						description: 'The default slot.',
+					})
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with @name modifier', () => {
+				const act = parse(
+					mockLoad({
+						'@slot': ['A named slot.\n@name content'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.slots.push(
+					newSlot({
+						name: 'content',
+						description: 'A named slot.',
 					})
 				)
 

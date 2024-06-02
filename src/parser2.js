@@ -16,6 +16,7 @@ export default (data) => {
 
 	parseComponent(result, data)
 	parseProps(result, data)
+	parseSlots(result, data)
 
 	return result
 }
@@ -59,6 +60,29 @@ const parseProp = (rawProp) => {
 		const: '@const' in mods,
 		module: '@module' in mods,
 		default: parseModString(mods, '@default'),
+	}
+}
+
+const parseSlots = (result, data) => {
+	const rawSlots = data.nodes['@slot']
+	result.slots = []
+
+	if (!rawSlots || rawSlots.length === 0) {
+		return
+	}
+
+	for (const s of rawSlots) {
+		result.slots.push(parseSlot(s))
+	}
+}
+
+const parseSlot = (rawSlot) => {
+	const [desc, mods] = separateModifiers(rawSlot)
+	const name = mods['@name']
+
+	return {
+		name: name?.trim() ? name.trim() : 'default',
+		description: desc,
 	}
 }
 
