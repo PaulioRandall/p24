@@ -59,6 +59,9 @@ const parseProp = (rawProp) => {
 		name: name,
 		description: desc,
 		alias: parseModAlias(mods),
+		const: '@const' in mods,
+		module: '@module' in mods,
+		//default
 	}
 }
 
