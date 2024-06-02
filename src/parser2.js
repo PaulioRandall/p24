@@ -15,6 +15,7 @@ export default (data) => {
 	const result = {}
 
 	parseComponent(result, data)
+	parseProps(result, data)
 
 	return result
 }
@@ -37,6 +38,29 @@ const parseComponent = (result, data) => {
 	}
 }
 
+const parseProps = (result, data) => {
+	const rawProps = data.nodes['@prop']
+	result.props = []
+
+	if (!rawProps || rawProps.length === 0) {
+		return
+	}
+
+	for (const p of rawProps) {
+		result.props.push(parseProp(p))
+	}
+}
+
+const parseProp = (rawProp) => {
+	const [content, mods] = separateModifiers(rawProp)
+	const [name, desc] = separateNameAndDesc(content)
+
+	return {
+		name: name,
+		description: desc,
+	}
+}
+
 const separateModifiers = (content) => {
 	const lines = content.split('\n')
 	const mods = []
@@ -54,6 +78,17 @@ const separateModifiers = (content) => {
 		lines.join('\n').trim(),
 		parseMods(mods),
 	]
+}
+
+const separateNameAndDesc = (content) => {
+	content = content.trim()
+	const i = content.indexOf(' ')
+
+	if (i === -1) {
+		return [content, '']
+	}
+
+	return [content.slice(0, i).trim(), content.slice(i).trim()]
 }
 
 const parseMods = (modifiers) => {
