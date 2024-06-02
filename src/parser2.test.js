@@ -16,7 +16,7 @@ const newExpect = () => {
 		props: [],
 		slots: [],
 		contexts: [],
-		//events: [],
+		events: [],
 	}
 }
 
@@ -323,6 +323,26 @@ describe('parser.js', () => {
 					newCtx({
 						name: 'abc-123',
 						description: 'holds nothing.',
+					})
+				)
+
+				expect(act).toEqual(exp)
+			})
+		})
+
+		describe('events', () => {
+			test('is parsed with @on', () => {
+				const act = parse(
+					mockLoad({
+						'@on': ['load is called when the thing loads.'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.events.push(
+					newCtx({
+						name: 'load',
+						description: 'is called when the thing loads.',
 					})
 				)
 

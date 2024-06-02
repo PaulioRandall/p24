@@ -18,6 +18,7 @@ export default (data) => {
 	parseProps(result, data)
 	parseSlots(result, data)
 	parseContexts(result, data)
+	parseEvents(result, data)
 
 	return result
 }
@@ -102,6 +103,29 @@ const parseContexts = (result, data) => {
 
 const parseContext = (rawCtx) => {
 	const [content, mods] = separateModifiers(rawCtx)
+	const [name, desc] = separateNameAndDesc(content)
+
+	return {
+		name: name.trim(),
+		description: desc.trim(),
+	}
+}
+
+const parseEvents = (result, data) => {
+	const rawEvents = data.nodes['@on']
+	result.events = []
+
+	if (!rawEvents || rawEvents.length === 0) {
+		return
+	}
+
+	for (const e of rawEvents) {
+		result.events.push(parseEvent(e))
+	}
+}
+
+const parseEvent = (rawEvent) => {
+	const [content, mods] = separateModifiers(rawEvent)
 	const [name, desc] = separateNameAndDesc(content)
 
 	return {
