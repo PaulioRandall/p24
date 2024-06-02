@@ -32,10 +32,7 @@ const parseComponent = (result, data) => {
 
 	const [desc, mods] = separateModifiers(nodes[0])
 	result.description = desc
-
-	if ('@name' in mods) {
-		result.name = mods['@name']
-	}
+	result.name = parseModString(mods, '@name', result.name)
 }
 
 const parseProps = (result, data) => {
@@ -61,7 +58,7 @@ const parseProp = (rawProp) => {
 		alias: parseModAlias(mods),
 		const: '@const' in mods,
 		module: '@module' in mods,
-		//default
+		default: parseModString(mods, '@default'),
 	}
 }
 
@@ -110,6 +107,16 @@ const parseModAlias = (mods) => {
 	return split(mods['@alias']) //
 		.map((s) => s.trim())
 		.filter((s) => !!s)
+}
+
+const parseModString = (mods, name, defaultValue = '') => {
+	const exists = mods[name]
+
+	if (!exists || !exists.trim()) {
+		return defaultValue
+	}
+
+	return mods[name].trim()
 }
 
 const bifurcate = (s) => {

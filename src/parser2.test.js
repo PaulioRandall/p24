@@ -20,17 +20,19 @@ const newExpect = () => {
 	}
 }
 
-const newProp = (custom) =>
-	Object.assign(
+const newProp = (custom) => {
+	return Object.assign(
 		{
 			name: '',
 			description: '',
 			alias: [],
 			const: false,
 			module: false,
+			default: '',
 		},
 		custom
 	)
+}
 
 describe('parser.js', () => {
 	describe('parse', () => {
@@ -150,13 +152,12 @@ describe('parser.js', () => {
 				)
 
 				const exp = newExpect()
-				exp.props.push({
-					name: 'first',
-					description: '',
-					alias: ['f1', 'f2'],
-					const: false,
-					module: false,
-				})
+				exp.props.push(
+					newProp({
+						name: 'first',
+						alias: ['f1', 'f2'],
+					})
+				)
 
 				expect(act).toEqual(exp)
 			})
@@ -209,6 +210,42 @@ describe('parser.js', () => {
 					newProp({
 						name: 'first',
 						module: true,
+					})
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with @default', () => {
+				const act = parse(
+					mockLoad({
+						'@prop': ['first\n@default value'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.props.push(
+					newProp({
+						name: 'first',
+						default: 'value',
+					})
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with empty @default', () => {
+				const act = parse(
+					mockLoad({
+						'@prop': ['first\n@default'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.props.push(
+					newProp({
+						name: 'first',
+						default: '',
 					})
 				)
 
