@@ -17,6 +17,7 @@ export default (data) => {
 	parseComponent(result, data)
 	parseProps(result, data)
 	parseSlots(result, data)
+	parseContexts(result, data)
 
 	return result
 }
@@ -83,6 +84,29 @@ const parseSlot = (rawSlot) => {
 	return {
 		name: name?.trim() ? name.trim() : 'default',
 		description: desc,
+	}
+}
+
+const parseContexts = (result, data) => {
+	const rawCtxs = data.nodes['@ctx']
+	result.contexts = []
+
+	if (!rawCtxs || rawCtxs.length === 0) {
+		return
+	}
+
+	for (const c of rawCtxs) {
+		result.contexts.push(parseContext(c))
+	}
+}
+
+const parseContext = (rawCtx) => {
+	const [content, mods] = separateModifiers(rawCtx)
+	const [name, desc] = separateNameAndDesc(content)
+
+	return {
+		name: name.trim(),
+		description: desc.trim(),
 	}
 }
 

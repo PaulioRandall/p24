@@ -15,7 +15,7 @@ const newExpect = () => {
 		description: '',
 		props: [],
 		slots: [],
-		//context: [],
+		contexts: [],
 		//events: [],
 	}
 }
@@ -38,6 +38,16 @@ const newSlot = (custom) => {
 	return Object.assign(
 		{
 			name: 'default',
+			description: '',
+		},
+		custom
+	)
+}
+
+const newCtx = (custom) => {
+	return Object.assign(
+		{
+			name: '',
 			description: '',
 		},
 		custom
@@ -293,6 +303,26 @@ describe('parser.js', () => {
 					newSlot({
 						name: 'content',
 						description: 'A named slot.',
+					})
+				)
+
+				expect(act).toEqual(exp)
+			})
+		})
+
+		describe('context', () => {
+			test('is parsed with @ctx', () => {
+				const act = parse(
+					mockLoad({
+						'@ctx': ['abc-123 holds nothing.'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.contexts.push(
+					newCtx({
+						name: 'abc-123',
+						description: 'holds nothing.',
 					})
 				)
 
