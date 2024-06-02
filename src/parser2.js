@@ -58,6 +58,7 @@ const parseProp = (rawProp) => {
 	return {
 		name: name,
 		description: desc,
+		alias: parseModAlias(mods),
 	}
 }
 
@@ -81,24 +82,51 @@ const separateModifiers = (content) => {
 }
 
 const separateNameAndDesc = (content) => {
-	content = content.trim()
-	const i = content.indexOf(' ')
-
-	if (i === -1) {
-		return [content, '']
-	}
-
-	return [content.slice(0, i).trim(), content.slice(i).trim()]
+	const [name, desc] = bifurcate(content.trim())
+	return [name.trim(), desc.trim()]
 }
 
 const parseMods = (modifiers) => {
 	const mods = {}
 
 	for (const m of modifiers) {
-		const parts = m.trim().split(' ', 2)
-		const value = parts.length > 1 ? parts[1].trim() : 'true'
-		mods[parts[0]] = value
+		const [name, value] = bifurcate(m.trim())
+		mods[name] = value ? value : ''
 	}
 
 	return mods
+}
+
+const parseModAlias = (mods) => {
+	const exists = mods['@alias']
+
+	if (!exists || !exists.trim()) {
+		return []
+	}
+
+	return split(mods['@alias']) //
+		.map((s) => s.trim())
+		.filter((s) => !!s)
+}
+
+const bifurcate = (s) => {
+	const i = s.indexOf(' ')
+
+	if (i === -1) {
+		return [s, '']
+	}
+
+	return [s.slice(0, i), s.slice(i + 1)]
+}
+
+const split = (s) => {
+	const values = []
+
+	while (s) {
+		const [next, rest] = bifurcate(s)
+		values.push(next)
+		s = rest
+	}
+
+	return values
 }

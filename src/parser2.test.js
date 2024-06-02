@@ -84,6 +84,82 @@ describe('parser.js', () => {
 				exp.props.push({
 					name: 'first',
 					description: 'is the first prop.',
+					alias: [],
+				})
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with name only', () => {
+				const act = parse(
+					mockLoad({
+						'@prop': ['first'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.props.push({
+					name: 'first',
+					description: '',
+					alias: [],
+				})
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with name only', () => {
+				const act = parse(
+					mockLoad({
+						'@prop': ['first is the first prop.', 'second is the second prop.'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.props.push(
+					{
+						name: 'first',
+						description: 'is the first prop.',
+						alias: [],
+					},
+					{
+						name: 'second',
+						description: 'is the second prop.',
+						alias: [],
+					}
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with alias', () => {
+				const act = parse(
+					mockLoad({
+						'@prop': ['first\n@alias f1 f2'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.props.push({
+					name: 'first',
+					description: '',
+					alias: ['f1', 'f2'],
+				})
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with empty alias', () => {
+				const act = parse(
+					mockLoad({
+						'@prop': ['first\n@alias'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.props.push({
+					name: 'first',
+					description: '',
+					alias: [],
 				})
 
 				expect(act).toEqual(exp)
