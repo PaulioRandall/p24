@@ -11,7 +11,7 @@ const mockLoad = (nodes) => {
 
 describe('parser.js', () => {
 	describe('parse', () => {
-		test('', () => {
+		test('no data', () => {
 			const act = parse(mockLoad({}))
 
 			const exp = {
@@ -22,19 +22,51 @@ describe('parser.js', () => {
 			expect(act).toEqual(exp)
 		})
 
-		test('', () => {
-			const act = parse(
-				mockLoad({
-					'@component': ['Alphabet'],
-				})
-			)
+		describe('description', () => {
+			test('is parsed', () => {
+				const act = parse(
+					mockLoad({
+						'@component': ['Alphabet'],
+					})
+				)
 
-			const exp = {
-				name: 'Weatherwax',
-				description: 'Alphabet',
-			}
+				const exp = {
+					name: 'Weatherwax',
+					description: 'Alphabet',
+				}
 
-			expect(act).toEqual(exp)
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with all lines', () => {
+				const act = parse(
+					mockLoad({
+						'@component': ['Alphabet\nAlphabet\nAlphabet'],
+					})
+				)
+
+				const exp = {
+					name: 'Weatherwax',
+					description: 'Alphabet\nAlphabet\nAlphabet',
+				}
+
+				expect(act).toEqual(exp)
+			})
+
+			test('is parsed with custom name', () => {
+				const act = parse(
+					mockLoad({
+						'@component': ['Alphabet\n@name Soup'],
+					})
+				)
+
+				const exp = {
+					name: 'Soup',
+					description: 'Alphabet',
+				}
+
+				expect(act).toEqual(exp)
+			})
 		})
 	})
 })

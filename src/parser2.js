@@ -32,8 +32,8 @@ const parseComponent = (result, data) => {
 	const [desc, mods] = separateModifiers(nodes[0])
 	result.description = desc
 
-	if ('name' in mods) {
-		result.name = mods.name
+	if ('@name' in mods) {
+		result.name = mods['@name']
 	}
 }
 
@@ -60,11 +60,9 @@ const parseMods = (modifiers) => {
 	const mods = {}
 
 	for (const m of modifiers) {
-		m = m.trim()
-		const parts = m.split(' ', 1)
-
-		const value = parts.length > 1 ? parts[1] : true
-		mods[name] = value
+		const parts = m.trim().split(' ', 2)
+		const value = parts.length > 1 ? parts[1].trim() : 'true'
+		mods[parts[0]] = value
 	}
 
 	return mods
