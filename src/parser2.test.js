@@ -44,7 +44,7 @@ const newSlot = (custom) => {
 	)
 }
 
-const newCtx = (custom) => {
+const newCtxOrEvent = (custom) => {
 	return Object.assign(
 		{
 			name: '',
@@ -320,7 +320,7 @@ describe('parser.js', () => {
 
 				const exp = newExpect()
 				exp.contexts.push(
-					newCtx({
+					newCtxOrEvent({
 						name: 'abc-123',
 						description: 'holds nothing.',
 					})
@@ -340,7 +340,7 @@ describe('parser.js', () => {
 
 				const exp = newExpect()
 				exp.events.push(
-					newCtx({
+					newCtxOrEvent({
 						name: 'load',
 						description: 'is called when the thing loads.',
 					})

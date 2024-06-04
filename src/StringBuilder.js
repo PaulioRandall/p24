@@ -6,11 +6,13 @@ export default class {
 
 	append(s) {
 		this.chars += s
+		return this
 	}
 
 	line(s = '') {
 		this.lines.push(this.chars + s)
 		this.chars = ''
+		return this
 	}
 
 	toString() {

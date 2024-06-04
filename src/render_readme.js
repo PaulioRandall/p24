@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 
+import read from './reader.js'
 import parse from './parser.js'
 import mdStringify from './md_stringify.js'
 import htmlStringify from './html_stringify.js'
@@ -16,7 +17,8 @@ export default function (options = {}) {
 		...options,
 	}
 
-	const components = parse(options)
+	const rawComponents = read(options)
+	const components = parse(rawComponents)
 	const docs = composeDocs(components)
 
 	const templateFile = path.resolve(options.template)
