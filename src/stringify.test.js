@@ -47,147 +47,298 @@ const lines = (...lines) => lines.join('\n')
 
 describe('stringify.js', () => {
 	describe('markdown', () => {
-		test('name and description', () => {
-			const input = newInput()
-			input.name = 'Component'
-			input.description = 'Message.'
+		describe('name and description', () => {
+			test('name only', () => {
+				const input = newInput()
+				input.name = 'Component'
 
-			const act = markdown(input)
+				const act = markdown(input)
 
-			const exp = lines('### `<Component>`', '', 'Message.')
+				const exp = lines('### `<Component>`')
 
-			expect(act).toEqual(exp)
+				expect(act).toEqual(exp)
+			})
+
+			test('name and description', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.description = 'Message.'
+
+				const act = markdown(input)
+
+				const exp = lines('### `<Component>`', '', 'Message.')
+
+				expect(act).toEqual(exp)
+			})
 		})
 
-		test('name without description', () => {
-			const input = newInput()
-			input.name = 'Component'
+		describe('props', () => {
+			test('let', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: false,
+						default: '',
+					},
+				]
 
-			const act = markdown(input)
+				const act = markdown(input)
 
-			const exp = lines('### `<Component>`')
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard',
+					'</script>',
+					'```'
+				)
 
-			expect(act).toEqual(exp)
+				expect(act).toEqual(exp)
+			})
+
+			test('const', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: true,
+						module: false,
+						default: '',
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport const wizard',
+					'</script>',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('module let', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: true,
+						default: '',
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script context="module">',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard',
+					'</script>',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('default', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: false,
+						default: '"value"',
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard = "value"',
+					'</script>',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('multiple', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard_a',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: false,
+						default: '',
+					},
+					{
+						name: 'wizard_b',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: false,
+						default: '',
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard_a',
+					'',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard_b',
+					'</script>',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('module and instance', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard_a',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: true,
+						default: '',
+					},
+					{
+						name: 'wizard_b',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: false,
+						default: '',
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script context="module">',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard_a',
+					'</script>',
+					'```',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard_b',
+					'</script>',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
 		})
 
-		test('let prop', () => {
-			const input = newInput()
-			input.name = 'Component'
-			input.props = [
-				{
-					name: 'wizard',
-					description: "A wizard's staff has a knob on the end.",
-					alias: [],
-					const: false,
-					module: false,
-					default: '',
-				},
-			]
+		describe('contexts', () => {
+			test('single', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.contexts = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
 
-			const act = markdown(input)
+				const act = markdown(input)
 
-			const exp = lines(
-				'### `<Component>`',
-				'',
-				'```svelte',
-				'<script>',
-				"\t// A wizard's staff has a knob on the end.",
-				'\texport let wizard',
-				'</script>',
-				'```'
-			)
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\tsetContext("wizard", ...)',
+					'</script>',
+					'```'
+				)
 
-			expect(act).toEqual(exp)
-		})
+				expect(act).toEqual(exp)
+			})
 
-		test('const prop', () => {
-			const input = newInput()
-			input.name = 'Component'
-			input.props = [
-				{
-					name: 'wizard',
-					description: "A wizard's staff has a knob on the end.",
-					alias: [],
-					const: true,
-					module: false,
-					default: '',
-				},
-			]
+			test('multiple', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.contexts = [
+					{
+						name: 'wizard_a',
+						description: "A wizard's staff has a knob on the end.",
+					},
+					{
+						name: 'wizard_b',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
 
-			const act = markdown(input)
+				const act = markdown(input)
 
-			const exp = lines(
-				'### `<Component>`',
-				'',
-				'```svelte',
-				'<script>',
-				"\t// A wizard's staff has a knob on the end.",
-				'\texport const wizard',
-				'</script>',
-				'```'
-			)
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\tsetContext("wizard_a", ...)',
+					'',
+					"\t// A wizard's staff has a knob on the end.",
+					'\tsetContext("wizard_b", ...)',
+					'</script>',
+					'```'
+				)
 
-			expect(act).toEqual(exp)
-		})
-
-		test('module let prop', () => {
-			const input = newInput()
-			input.name = 'Component'
-			input.props = [
-				{
-					name: 'wizard',
-					description: "A wizard's staff has a knob on the end.",
-					alias: [],
-					const: false,
-					module: true,
-					default: '',
-				},
-			]
-
-			const act = markdown(input)
-
-			const exp = lines(
-				'### `<Component>`',
-				'',
-				'```svelte',
-				'<script context="module">',
-				"\t// A wizard's staff has a knob on the end.",
-				'\texport let wizard',
-				'</script>',
-				'```'
-			)
-
-			expect(act).toEqual(exp)
-		})
-
-		test('prop default', () => {
-			const input = newInput()
-			input.name = 'Component'
-			input.props = [
-				{
-					name: 'wizard',
-					description: "A wizard's staff has a knob on the end.",
-					alias: [],
-					const: false,
-					module: false,
-					default: '"value"',
-				},
-			]
-
-			const act = markdown(input)
-
-			const exp = lines(
-				'### `<Component>`',
-				'',
-				'```svelte',
-				'<script>',
-				"\t// A wizard's staff has a knob on the end.",
-				'\texport let wizard = "value"',
-				'</script>',
-				'```'
-			)
-
-			expect(act).toEqual(exp)
+				expect(act).toEqual(exp)
+			})
 		})
 	})
 })

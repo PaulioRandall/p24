@@ -8,7 +8,16 @@ export const markdown = (node) => {
 	const sb = new StringBuilder()
 
 	appendHeader(sb, node)
-	appendProps(sb, node.props)
+
+	const [moduleProps, instanceProps] = filterAndSortProps(node.props)
+
+	if (moduleProps.length > 0) {
+		appendModuleProps(sb, moduleProps)
+	}
+
+	if (instanceProps.length > 0 || node.contexts.length > 0) {
+		appendInstancePropsAndContexts(sb, instanceProps, node.contexts)
+	}
 
 	return sb.toString()
 }
@@ -19,18 +28,6 @@ const appendHeader = (sb, node) => {
 	if (node.description) {
 		sb.line()
 		sb.line(node.description)
-	}
-}
-
-const appendProps = (sb, props) => {
-	const [moduleProps, instanceProps] = filterAndSortProps(props)
-
-	if (instanceProps.length > 0) {
-		appendPropBlock(sb, instanceProps)
-	}
-
-	if (moduleProps.length > 0) {
-		appendPropBlock(sb, moduleProps, true)
 	}
 }
 
@@ -46,25 +43,51 @@ const filterAndSortProps = (props) => {
 		}
 	}
 
-	return [moduleProps, instanceProps]
+	const cmp = (a, b) => {
+		if (a.const && b.const) {
+			return 0
+		}
+
+		return a.const ? -1 : 1
+	}
+
+	return [
+		//
+		moduleProps.sort(cmp),
+		instanceProps.sort(cmp),
+	]
 }
 
-const appendPropBlock = (sb, props, context = false) => {
+const appendModuleProps = (sb, props) => {
 	sb.line()
 	sb.line('```svelte')
+	sb.line('<script context="module">')
 
-	sb.append('<script')
-	if (context) {
-		sb.append(' context="module"')
-	}
-	sb.line('>')
-
-	for (const p of props) {
-		appendProp(sb, p)
-	}
+	appendProps(sb, props)
 
 	sb.line('</script>')
 	sb.line('```')
+}
+
+const appendInstancePropsAndContexts = (sb, props, ctxs) => {
+	sb.line()
+	sb.line('```svelte')
+	sb.line('<script>')
+
+	appendProps(sb, props)
+	appendContexts(sb, ctxs)
+
+	sb.line('</script>')
+	sb.line('```')
+}
+
+const appendProps = (sb, props) => {
+	for (let i = 0; i < props.length; i++) {
+		if (i > 0) {
+			sb.line()
+		}
+		appendProp(sb, props[i])
+	}
 }
 
 const appendProp = (sb, prop) => {
@@ -80,6 +103,23 @@ const appendProp = (sb, prop) => {
 	}
 
 	sb.line()
+}
+
+const appendContexts = (sb, ctxs) => {
+	for (let i = 0; i < ctxs.length; i++) {
+		if (i > 0) {
+			sb.line()
+		}
+		appendContext(sb, ctxs[i])
+	}
+}
+
+const appendContext = (sb, ctx) => {
+	appendJsComment(sb, ctx.description)
+
+	sb.append('\tsetContext("')
+	sb.append(ctx.name)
+	sb.line('", ...)')
 }
 
 const appendJsComment = (sb, comment) => {
