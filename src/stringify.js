@@ -10,13 +10,18 @@ export const markdown = (node) => {
 	appendHeader(sb, node)
 
 	const [moduleProps, instanceProps] = filterAndSortProps(node.props)
+	const hasScriptNodes = //
+		instanceProps.length > 0 ||
+		node.contexts.length > 0 ||
+		node.events.length > 0 ||
+		node.slots.length > 0
 
 	if (moduleProps.length > 0) {
-		appendModuleProps(sb, moduleProps)
+		appendModuleNodes(sb, moduleProps)
 	}
 
-	if (instanceProps.length > 0 || node.contexts.length > 0) {
-		appendInstancePropsAndContexts(sb, instanceProps, node.contexts)
+	if (hasScriptNodes) {
+		appendScriptNodes(sb, instanceProps, node.contexts, node.events, node.slots)
 	}
 
 	return sb.toString()
@@ -58,7 +63,7 @@ const filterAndSortProps = (props) => {
 	]
 }
 
-const appendModuleProps = (sb, props) => {
+const appendModuleNodes = (sb, props) => {
 	sb.line()
 	sb.line('```svelte')
 	sb.line('<script context="module">')
@@ -69,15 +74,51 @@ const appendModuleProps = (sb, props) => {
 	sb.line('```')
 }
 
-const appendInstancePropsAndContexts = (sb, props, ctxs) => {
+const appendScriptNodes = (sb, props, ctxs, events, slots) => {
+	const hasProps = props.length > 0
+	const hasCtxs = ctxs.length > 0
+	const hasEvents = events.length > 0
+	const hasSlots = slots.length > 0
+
 	sb.line()
 	sb.line('```svelte')
-	sb.line('<script>')
 
-	appendProps(sb, props)
-	appendContexts(sb, ctxs)
+	if (hasProps || hasCtxs || hasEvents) {
+		sb.line('<script>')
+	}
 
-	sb.line('</script>')
+	if (hasProps) {
+		appendProps(sb, props)
+	}
+
+	if (hasProps && hasCtxs) {
+		sb.line()
+	}
+
+	if (hasCtxs) {
+		appendContexts(sb, ctxs)
+	}
+
+	if (hasCtxs && hasEvents) {
+		sb.line()
+	}
+
+	if (hasEvents) {
+		appendEvents(sb, events)
+	}
+
+	if (hasProps || hasCtxs || hasEvents) {
+		sb.line('</script>')
+	}
+
+	if ((hasProps || hasCtxs || hasEvents) && hasSlots) {
+		sb.line()
+	}
+
+	if (hasSlots) {
+		appendSlots(sb, slots)
+	}
+
 	sb.line('```')
 }
 
@@ -122,12 +163,65 @@ const appendContext = (sb, ctx) => {
 	sb.line('", ...)')
 }
 
+const appendSlots = (sb, slots) => {
+	for (let i = 0; i < slots.length; i++) {
+		if (i > 0) {
+			sb.line()
+		}
+		appendSlot(sb, slots[i])
+	}
+}
+
+const appendSlot = (sb, slot) => {
+	appendHtmlComment(sb, slot.description)
+
+	sb.append('<slot')
+
+	if (slot.name !== 'default') {
+		sb.append(' name="').append(slot.name).append('"')
+	}
+
+	sb.line(' />')
+}
+
+const appendEvents = (sb, events) => {
+	for (let i = 0; i < events.length; i++) {
+		if (i > 0) {
+			sb.line()
+		}
+		appendEvent(sb, events[i])
+	}
+}
+
+const appendEvent = (sb, event) => {
+	appendJsComment(sb, event.description)
+
+	sb.append('\tdispatch("')
+	sb.append(event.name)
+	sb.line('", {})')
+}
+
 const appendJsComment = (sb, comment) => {
 	comment = comment.replace(/\r/g, '')
 
 	for (const line of comment.split('\n')) {
 		sb.line('\t// ' + line)
 	}
+}
+
+const appendHtmlComment = (sb, comment) => {
+	comment = comment.replace(/\r/g, '')
+
+	if (!comment.includes('\n')) {
+		sb.line('<!-- ' + comment + ' -->')
+		return
+	}
+
+	sb.line('<!--')
+	for (const line of comment.split('\n')) {
+		sb.line('\t' + line)
+	}
+	sb.line('-->')
 }
 
 /*

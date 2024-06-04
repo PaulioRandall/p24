@@ -340,5 +340,173 @@ describe('stringify.js', () => {
 				expect(act).toEqual(exp)
 			})
 		})
+
+		describe('slots', () => {
+			test('default', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.slots = [
+					{
+						name: 'default',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					"<!-- A wizard's staff has a knob on the end. -->",
+					'<slot />',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('named', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.slots = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					"<!-- A wizard's staff has a knob on the end. -->",
+					'<slot name="wizard" />',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+
+			test('multiple', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.slots = [
+					{
+						name: 'wizard_a',
+						description: "A wizard's staff has a knob on the end.",
+					},
+					{
+						name: 'wizard_b',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					"<!-- A wizard's staff has a knob on the end. -->",
+					'<slot name="wizard_a" />',
+					'',
+					"<!-- A wizard's staff has a knob on the end. -->",
+					'<slot name="wizard_b" />',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+		})
+
+		describe('events', () => {
+			test('single', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.events = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\tdispatch("wizard", {})',
+					'</script>',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+		})
+
+		describe('props & contexts & events & slots', () => {
+			test('single', () => {
+				const input = newInput()
+				input.name = 'Component'
+				input.props = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+						alias: [],
+						const: false,
+						module: false,
+						default: '',
+					},
+				]
+				input.contexts = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+				input.events = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+				input.slots = [
+					{
+						name: 'wizard',
+						description: "A wizard's staff has a knob on the end.",
+					},
+				]
+
+				const act = markdown(input)
+
+				const exp = lines(
+					'### `<Component>`',
+					'',
+					'```svelte',
+					'<script>',
+					"\t// A wizard's staff has a knob on the end.",
+					'\texport let wizard',
+					'',
+					"\t// A wizard's staff has a knob on the end.",
+					'\tsetContext("wizard", ...)',
+					'',
+					"\t// A wizard's staff has a knob on the end.",
+					'\tdispatch("wizard", {})',
+					'</script>',
+					'',
+					"<!-- A wizard's staff has a knob on the end. -->",
+					'<slot name="wizard" />',
+					'```'
+				)
+
+				expect(act).toEqual(exp)
+			})
+		})
 	})
 })
