@@ -450,10 +450,11 @@ describe('stringify.js', () => {
 			})
 		})
 
-		describe('props & contexts & events & slots', () => {
+		describe('everything', () => {
 			test('single', () => {
 				const input = newInput()
 				input.name = 'Component'
+				input.description = "A wizard's staff has a knob on the end."
 				input.props = [
 					{
 						name: 'wizard',
@@ -487,6 +488,8 @@ describe('stringify.js', () => {
 
 				const exp = lines(
 					'### `<Component>`',
+					'',
+					"A wizard's staff has a knob on the end.",
 					'',
 					'```svelte',
 					'<script>',
