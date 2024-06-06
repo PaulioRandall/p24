@@ -1,4 +1,4 @@
-import { markdown } from './stringify.js'
+import { markdown, html } from './stringify.js'
 
 const newInput = () => {
 	return {
@@ -510,6 +510,109 @@ describe('stringify.js', () => {
 
 				expect(act).toEqual(exp)
 			})
+		})
+	})
+
+	describe('html', () => {
+		test('name', () => {
+			const input = newInput()
+			input.name = 'Component'
+
+			const act = html(input)
+
+			const exp = lines(
+				'```svelte',
+				'<Component />', //
+				'```'
+			)
+
+			expect(act).toEqual(exp)
+		})
+
+		test('props', () => {
+			const input = newInput()
+			input.name = 'Component'
+			input.props = [
+				{
+					name: 'wizard',
+					description: '',
+					alias: [],
+					const: false,
+					module: false,
+					default: '',
+				},
+				{
+					name: 'witch',
+					description: '',
+					alias: [],
+					const: false,
+					module: false,
+					default: '"hag"',
+				},
+				{
+					name: 'warlord',
+					description: '',
+					alias: [],
+					const: false,
+					module: false,
+					default: '69',
+				},
+				{
+					name: 'warlock',
+					description: '',
+					alias: [],
+					const: true,
+					module: false,
+				},
+			]
+
+			const act = html(input)
+
+			const exp = lines(
+				'```svelte',
+				'<Component',
+				'\twizard',
+				'\twitch="hag"',
+				'\twarlord={69}',
+				'\tbind:warlock',
+				'/>',
+				'```'
+			)
+
+			expect(act).toEqual(exp)
+		})
+
+		test('slots', () => {
+			const input = newInput()
+			input.name = 'Component'
+			input.slots = [
+				{
+					name: 'default',
+					description: '',
+				},
+				{
+					name: 'wizard',
+					description: '',
+				},
+				{
+					name: 'witch',
+					description: '',
+				},
+			]
+
+			const act = html(input)
+
+			const exp = lines(
+				'```svelte',
+				'<Component>',
+				'\t<div />',
+				'\t<div slot="wizard" />',
+				'\t<div slot="witch" />',
+				'</Component>',
+				'```'
+			)
+
+			expect(act).toEqual(exp)
 		})
 	})
 })
