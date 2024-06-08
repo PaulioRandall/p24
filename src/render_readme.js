@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 import read from './reader.js'
-import parse from './parser2.js'
+import parse from './parser.js'
 import { markdown, html } from './stringify.js'
 
 export default function (options = {}) {

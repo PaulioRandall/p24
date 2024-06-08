@@ -1,4 +1,4 @@
-import parse from './parser2.js'
+import parse from './parser.js'
 
 const mockLoad = (nodes) => {
 	return {
