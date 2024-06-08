@@ -134,47 +134,48 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 		})
-		/*
+
 		describe('prop', () => {
-			test('is parsed with name and description', () => {
+			test('name only', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first is the first prop.'],
+						prop: ['NAME'],
 					})
 				)
 
 				const exp = newExpect()
 				exp.props.push(
 					newProp({
-						name: 'first',
-						description: 'is the first prop.',
+						name: 'NAME',
+						description: '',
 					})
 				)
 
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with name only', () => {
+			test('description', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first'],
+						prop: ['NAME\nDESC'],
 					})
 				)
 
 				const exp = newExpect()
 				exp.props.push(
 					newProp({
-						name: 'first',
+						name: 'NAME',
+						description: 'DESC',
 					})
 				)
 
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with name only', () => {
+			test('multiple props', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first is the first prop.', 'second is the second prop.'],
+						prop: ['first\nThe first prop.', 'second\nThe second prop.'],
 					})
 				)
 
@@ -182,21 +183,21 @@ describe('parser.js', () => {
 				exp.props.push(
 					newProp({
 						name: 'first',
-						description: 'is the first prop.',
+						description: 'The first prop.',
 					}),
 					newProp({
 						name: 'second',
-						description: 'is the second prop.',
+						description: 'The second prop.',
 					})
 				)
 
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with @alias', () => {
+			test('with alias', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first\n@alias f1 f2'],
+						prop: ['first\n@alias f1 f2'],
 					})
 				)
 
@@ -211,10 +212,10 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with empty @alias', () => {
+			test('with empty alias', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first\n@alias'],
+						prop: ['first\n@alias'],
 					})
 				)
 
@@ -229,10 +230,10 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with @const', () => {
+			test('as const', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first\n@const'],
+						prop: ['first\n@const'],
 					})
 				)
 
@@ -247,10 +248,10 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with @module', () => {
+			test('as module', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first\n@module'],
+						prop: ['first\n@module'],
 					})
 				)
 
@@ -265,10 +266,10 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with @default', () => {
+			test('with default', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first\n@default value'],
+						prop: ['first\n@default value'],
 					})
 				)
 
@@ -283,10 +284,10 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with empty @default', () => {
+			test('with empty default', () => {
 				const act = parse(
 					mockLoad({
-						'@prop': ['first\n@default'],
+						prop: ['first\n@default'],
 					})
 				)
 
@@ -301,7 +302,7 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 		})
-
+		/*
 		describe('slot', () => {
 			test('is parsed with @slot', () => {
 				const act = parse(

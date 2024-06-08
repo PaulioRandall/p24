@@ -33,9 +33,9 @@ const parseComponent = (result, data) => {
 		return
 	}
 
-	const [name, desc, ...mods] = splitContent(component[0])
-	result.name = name || result.name
-	result.description = desc || ''
+	const parts = splitContent(component[0])
+	result.name = parts.name || result.name
+	result.description = parts.desc || ''
 }
 
 const parseProps = (result, data) => {
@@ -52,16 +52,15 @@ const parseProps = (result, data) => {
 }
 
 const parseProp = (rawProp) => {
-	const [content, mods] = separateModifiers(rawProp)
-	const [name, desc] = separateNameAndDesc(content)
+	const parts = splitContent(rawProp)
 
 	return {
-		name: name,
-		description: desc,
-		alias: parseModAlias(mods),
-		const: '@const' in mods,
-		module: '@module' in mods,
-		default: parseModString(mods, '@default'),
+		name: parts.name,
+		description: parts.desc,
+		alias: split(parts.mods.alias || '').map((s) => s.trim()),
+		const: 'const' in parts.mods,
+		module: 'module' in parts.mods,
+		default: parts.mods.default?.trim() || '',
 	}
 }
 
@@ -136,15 +135,34 @@ const parseEvent = (rawEvent) => {
 
 const splitContent = (content) => {
 	const lines = content.split('\n')
-	const parts = [lines[0].trim()]
+	const parts = {
+		name: '',
+		desc: '',
+		mods: {},
+	}
+
+	// Name
+	parts.name = lines[0].trim()
 	lines.splice(0, 1)
 
+	// Description
+	if (lines.length > 0 && !beginsNewMod(lines[0])) {
+		const next = nextContent(lines)
+		parts.desc = next.trim()
+	}
+
+	// Mods
 	while (lines.length > 0) {
 		const next = nextContent(lines)
-		parts.push(next.trim())
+		const [name, value] = bifurcate(next.trim())
+		parts.mods[name.slice(1).trim()] = value.trim()
 	}
 
 	return parts
+}
+
+const beginsNewMod = (s) => {
+	return /^\s*@[a-z]+/.test(s)
 }
 
 const nextContent = (lines) => {
@@ -154,7 +172,7 @@ const nextContent = (lines) => {
 	let i = 1
 
 	for (; i < lines.length; i++) {
-		if (/^\s*@[a-z]+/.test(lines[i])) {
+		if (beginsNewMod(lines[i])) {
 			break
 		}
 
@@ -170,47 +188,18 @@ const separateNameAndDesc = (content) => {
 	return [name.trim(), desc.trim()]
 }
 
-const parseMods = (modifiers) => {
-	const mods = {}
-
-	for (const m of modifiers) {
-		const [name, value] = bifurcate(m.trim())
-		mods[name] = value ? value : ''
-	}
-
-	return mods
-}
-
-const parseModAlias = (mods) => {
-	const exists = mods['@alias']
-
-	if (!exists || !exists.trim()) {
-		return []
-	}
-
-	return split(mods['@alias']) //
-		.map((s) => s.trim())
-		.filter((s) => !!s)
-}
-
-const parseModString = (mods, name, defaultValue = '') => {
-	const exists = mods[name]
-
-	if (!exists || !exists.trim()) {
-		return defaultValue
-	}
-
-	return mods[name].trim()
-}
-
 const bifurcate = (s) => {
-	const i = s.indexOf(' ')
+	const i = s.search(/\s/)
 
 	if (i === -1) {
 		return [s, '']
 	}
 
-	return [s.slice(0, i), s.slice(i + 1)]
+	return [
+		//
+		s.slice(0, i).trim(),
+		s.slice(i).trim(),
+	]
 }
 
 const split = (s) => {
