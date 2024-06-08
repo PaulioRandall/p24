@@ -24,7 +24,7 @@ export default (data) => {
 }
 
 const parseComponent = (result, data) => {
-	result.name = data.name.split('.')[0]
+	result.name = data.name?.split('.')[0] || ''
 	result.description = ''
 
 	const nodes = data.nodes['@component']

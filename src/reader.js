@@ -8,7 +8,7 @@ export default (options = {}) => {
 const parseOptions = (userOptions) => {
 	return {
 		// glob: '**/*.svelte',
-		prefix: 'p24.',
+		prefix: '@',
 		...userOptions,
 	}
 }

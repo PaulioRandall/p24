@@ -2,13 +2,12 @@ import path from 'path'
 import fs from 'fs'
 
 import read from './reader.js'
-import parse from './parser.js'
-import mdStringify from './md_stringify.js'
-import htmlStringify from './html_stringify.js'
+import parse from './parser2.js'
+import { markdown, html } from './stringify.js'
 
 export default function (options = {}) {
 	options = {
-		prefix: 'p24.', //
+		prefix: '@', //
 		glob: '**/*.svelte',
 		globOptions: undefined,
 		template: './README.template.md',
@@ -18,7 +17,7 @@ export default function (options = {}) {
 	}
 
 	const rawComponents = read(options)
-	const components = parse(rawComponents)
+	const components = rawComponents.map(parse)
 	const docs = composeDocs(components)
 
 	const templateFile = path.resolve(options.template)
@@ -32,10 +31,9 @@ export default function (options = {}) {
 
 function composeDocs(components) {
 	return components //
-		.map((c) => c.nodes)
 		.map((n) => [
-			mdStringify(n), //
-			htmlStringify(n),
+			markdown(n), //
+			html(n),
 		])
 		.flat()
 		.join('\n\n')
