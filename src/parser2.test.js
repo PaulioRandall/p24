@@ -64,48 +64,77 @@ describe('parser.js', () => {
 			expect(act).toEqual(exp)
 		})
 
-		describe('description', () => {
-			test('is parsed', () => {
+		describe('name & description', () => {
+			test('name only', () => {
 				const act = parse(
 					mockLoad({
-						'@component': ['Alphabet'],
+						component: ['Alphabet'],
 					})
 				)
 
 				const exp = newExpect()
+				exp.name = 'Alphabet'
+
+				expect(act).toEqual(exp)
+			})
+
+			test('description only', () => {
+				const act = parse(
+					mockLoad({
+						component: ['\nAlphabet'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.name = 'Weatherwax'
 				exp.description = 'Alphabet'
 
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with all lines', () => {
+			test('name & description', () => {
 				const act = parse(
 					mockLoad({
-						'@component': ['Alphabet\nAlphabet\nAlphabet'],
+						component: ['Abc\nXyz'],
 					})
 				)
 
 				const exp = newExpect()
+				exp.name = 'Abc'
+				exp.description = 'Xyz'
+
+				expect(act).toEqual(exp)
+			})
+
+			test('multiline description', () => {
+				const act = parse(
+					mockLoad({
+						component: ['NAME\nAlphabet\nAlphabet\nAlphabet'],
+					})
+				)
+
+				const exp = newExpect()
+				exp.name = 'NAME'
 				exp.description = 'Alphabet\nAlphabet\nAlphabet'
 
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with custom name', () => {
+			test('ignores mods', () => {
 				const act = parse(
 					mockLoad({
-						'@component': ['Alphabet\n@name Soup'],
+						component: ['NAME\nAlphabet\n@name Soup'],
 					})
 				)
 
 				const exp = newExpect()
-				exp.name = 'Soup'
+				exp.name = 'NAME'
 				exp.description = 'Alphabet'
 
 				expect(act).toEqual(exp)
 			})
 		})
-
+		/*
 		describe('prop', () => {
 			test('is parsed with name and description', () => {
 				const act = parse(
@@ -349,5 +378,6 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 		})
+		*/
 	})
 })

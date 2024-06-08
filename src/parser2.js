@@ -1,4 +1,5 @@
 import { trim, clean } from './formatters.js'
+import StringBuilder from './StringBuilder.js'
 
 //@component
 //@prop
@@ -27,19 +28,18 @@ const parseComponent = (result, data) => {
 	result.name = data.name?.split('.')[0] || ''
 	result.description = ''
 
-	const nodes = data.nodes['@component']
-
-	if (!nodes || nodes.length === 0) {
+	const component = data.nodes['component']
+	if (!component || component.length === 0) {
 		return
 	}
 
-	const [desc, mods] = separateModifiers(nodes[0])
-	result.description = desc
-	result.name = parseModString(mods, '@name', result.name)
+	const [name, desc, ...mods] = splitContent(component[0])
+	result.name = name || result.name
+	result.description = desc || ''
 }
 
 const parseProps = (result, data) => {
-	const rawProps = data.nodes['@prop']
+	const rawProps = data.nodes['prop']
 	result.props = []
 
 	if (!rawProps || rawProps.length === 0) {
@@ -66,7 +66,7 @@ const parseProp = (rawProp) => {
 }
 
 const parseSlots = (result, data) => {
-	const rawSlots = data.nodes['@slot']
+	const rawSlots = data.nodes['slot']
 	result.slots = []
 
 	if (!rawSlots || rawSlots.length === 0) {
@@ -89,7 +89,7 @@ const parseSlot = (rawSlot) => {
 }
 
 const parseContexts = (result, data) => {
-	const rawCtxs = data.nodes['@ctx']
+	const rawCtxs = data.nodes['ctx']
 	result.contexts = []
 
 	if (!rawCtxs || rawCtxs.length === 0) {
@@ -112,7 +112,7 @@ const parseContext = (rawCtx) => {
 }
 
 const parseEvents = (result, data) => {
-	const rawEvents = data.nodes['@on']
+	const rawEvents = data.nodes['on']
 	result.events = []
 
 	if (!rawEvents || rawEvents.length === 0) {
@@ -134,23 +134,35 @@ const parseEvent = (rawEvent) => {
 	}
 }
 
-const separateModifiers = (content) => {
+const splitContent = (content) => {
 	const lines = content.split('\n')
-	const mods = []
+	const parts = [lines[0].trim()]
+	lines.splice(0, 1)
 
-	for (let i = 0; i < lines.length; i++) {
-		const line = lines[i]
-		if (/^\s*@[a-z]+/.test(line)) {
-			mods.push(line)
-			lines.splice(i, 1)
-		}
+	while (lines.length > 0) {
+		const next = nextContent(lines)
+		parts.push(next.trim())
 	}
 
-	return [
-		//
-		lines.join('\n').trim(),
-		parseMods(mods),
-	]
+	return parts
+}
+
+const nextContent = (lines) => {
+	const sb = new StringBuilder()
+
+	sb.line(lines[0])
+	let i = 1
+
+	for (; i < lines.length; i++) {
+		if (/^\s*@[a-z]+/.test(lines[i])) {
+			break
+		}
+
+		sb.line(lines[i])
+	}
+
+	lines.splice(0, i)
+	return sb.toString()
 }
 
 const separateNameAndDesc = (content) => {
