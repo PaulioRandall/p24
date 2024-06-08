@@ -302,37 +302,38 @@ describe('parser.js', () => {
 				expect(act).toEqual(exp)
 			})
 		})
-		/*
+
 		describe('slot', () => {
-			test('is parsed with @slot', () => {
+			test('with named slot', () => {
 				const act = parse(
 					mockLoad({
-						'@slot': ['The default slot.'],
+						slot: ['named\nA named slot.'],
 					})
 				)
 
 				const exp = newExpect()
 				exp.slots.push(
 					newSlot({
-						description: 'The default slot.',
+						name: 'named',
+						description: 'A named slot.',
 					})
 				)
 
 				expect(act).toEqual(exp)
 			})
 
-			test('is parsed with @name modifier', () => {
+			test('with default slot', () => {
 				const act = parse(
 					mockLoad({
-						'@slot': ['A named slot.\n@name content'],
+						slot: ['\nThe default slot.'],
 					})
 				)
 
 				const exp = newExpect()
 				exp.slots.push(
 					newSlot({
-						name: 'content',
-						description: 'A named slot.',
+						name: 'default',
+						description: 'The default slot.',
 					})
 				)
 
@@ -341,10 +342,10 @@ describe('parser.js', () => {
 		})
 
 		describe('context', () => {
-			test('is parsed with @ctx', () => {
+			test('with name & description', () => {
 				const act = parse(
 					mockLoad({
-						'@ctx': ['abc-123 holds nothing.'],
+						ctx: ['abc-123\nHolds nothing.'],
 					})
 				)
 
@@ -352,7 +353,7 @@ describe('parser.js', () => {
 				exp.contexts.push(
 					newCtxOrEvent({
 						name: 'abc-123',
-						description: 'holds nothing.',
+						description: 'Holds nothing.',
 					})
 				)
 
@@ -361,10 +362,10 @@ describe('parser.js', () => {
 		})
 
 		describe('events', () => {
-			test('is parsed with @on', () => {
+			test('with name & description', () => {
 				const act = parse(
 					mockLoad({
-						'@on': ['load is called when the thing loads.'],
+						on: ['load\nCalled when the thing loads.'],
 					})
 				)
 
@@ -372,13 +373,12 @@ describe('parser.js', () => {
 				exp.events.push(
 					newCtxOrEvent({
 						name: 'load',
-						description: 'is called when the thing loads.',
+						description: 'Called when the thing loads.',
 					})
 				)
 
 				expect(act).toEqual(exp)
 			})
 		})
-		*/
 	})
 })

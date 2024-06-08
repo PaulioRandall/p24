@@ -78,12 +78,11 @@ const parseSlots = (result, data) => {
 }
 
 const parseSlot = (rawSlot) => {
-	const [desc, mods] = separateModifiers(rawSlot)
-	const name = mods['@name']
+	const parts = splitContent(rawSlot)
 
 	return {
-		name: name?.trim() ? name.trim() : 'default',
-		description: desc,
+		name: parts.name ? parts.name : 'default',
+		description: parts.desc,
 	}
 }
 
@@ -101,12 +100,11 @@ const parseContexts = (result, data) => {
 }
 
 const parseContext = (rawCtx) => {
-	const [content, mods] = separateModifiers(rawCtx)
-	const [name, desc] = separateNameAndDesc(content)
+	const parts = splitContent(rawCtx)
 
 	return {
-		name: name.trim(),
-		description: desc.trim(),
+		name: parts.name,
+		description: parts.desc,
 	}
 }
 
@@ -124,12 +122,11 @@ const parseEvents = (result, data) => {
 }
 
 const parseEvent = (rawEvent) => {
-	const [content, mods] = separateModifiers(rawEvent)
-	const [name, desc] = separateNameAndDesc(content)
+	const parts = splitContent(rawEvent)
 
 	return {
-		name: name.trim(),
-		description: desc.trim(),
+		name: parts.name,
+		description: parts.desc,
 	}
 }
 
@@ -181,11 +178,6 @@ const nextContent = (lines) => {
 
 	lines.splice(0, i)
 	return sb.toString()
-}
-
-const separateNameAndDesc = (content) => {
-	const [name, desc] = bifurcate(content.trim())
-	return [name.trim(), desc.trim()]
 }
 
 const bifurcate = (s) => {
