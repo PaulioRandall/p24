@@ -34,9 +34,7 @@ Given the component:
   Name is inferred from the file name but may be specified as below.
 -->
 
-<!--P24.name: ArticleListItem -->
-
-<!--P24.description:
+<!--@component ArticleListItem
   To be slotted into either an `ArticleList` or `ArticleGrid` component. It
   presents summary information about the article and a preview image.
   clicking the component will take the user to the full article.
@@ -45,9 +43,11 @@ Given the component:
 <script context="module">
   import { base } from '$app/paths'
 
-  //P24.module.const.toFullPath:
+  //@prop toFullPath
   // Resolves a relative URL path to a full URL path by prepending the
   // application root path.
+  // @module
+  // @const
   export const toFullPath = (relPath) => {
     return `${base}/${relPath}`
   }
@@ -56,27 +56,30 @@ Given the component:
 <script>
   import { setContext } from 'svelte'
 
-  //P24.prop.let.title: Title of the article.
+  //@prop title
+  // Title of the article.
   export let title
 
-  //P24.p.let.author: Name of the person or people who wrote the article.
+  //@prop author
+  // Name of the person or people who wrote the article.
   export let author
 
-  //P24.p.let.link: URL to the full article.
+  //@prop link
+  // URL to the full article.
   export let link
 
-  //P24.p.let.published:
+  //@prop published
   // Date the article was published or falsy value if not yet published.
-  //P24.default.p.let.published: null 
+  // @default null 
   export let published = null
 
-  //P24.p.let.image:
+  //@prop image
   // URL of the preview image or falsy value to use the stock image.
   // You may used the named slot 'image' if custom HTML is needed.
-  //P24.d.p.let.image: null
+  // @default null
   export let image = null
 
-  /*P24.context.article-list-item:
+  /*@ctx article-list-item
     All details about the article including whether slotted image and summary
     were provided.
   */
@@ -96,7 +99,7 @@ Given the component:
   <h2>{title}</h2>
 
   {#if $$slots.image}
-    <!--P24.slot.image:
+    <!--@slot image
       Alternative to using the 'image' property if custom HTML is needed to
       present the article preview thumbnail.
     -->
@@ -107,7 +110,9 @@ Given the component:
     <img src="/images/stock-article-preview-image.jpg" />
   {/if}
 
-  <!--P24.s.default: Short description of the article. -->
+  <!--@slot
+    Short description of the article.
+  -->
   <slot />
 </article>
 ```
@@ -173,8 +178,7 @@ import p24 from 'p24'
 
 p24.parse({
   // Custom prefix for nodes.
-  // You could use "@" to parse "//@name: value" for example.
-  prefix: "p24.",
+  prefix: "@",
 
   // For SvelteKit packaged libraries you would use
   // "dist/*.svelte" or some variation of it.
@@ -198,28 +202,32 @@ Primary component in which fields are slotted into.
 $restProps are passed to the form element (outer component element).
 
 ```svelte
-<script>
+<script context="module">
   // Store containing fields referenced by their input names.
-  export const fields = writable({})
+  export let fields = writable({})
 
   // Store containing values referenced by their input names.
-  export const values = writable({})
+  export let values = writable({})
 
   // Store containing error messages referenced by their input names.
   // An empty string represents either no error or unvalidated.
-  export const errors = writable({})
+  export let errors = writable({})
 
   // Store containing the passed form level properties.
   // 
   // $form = {
-  //   id,
-  //   validate,
-  //   submit,
+  //    id,
+  //    validate,
+  //    submit,
   // }
-  export const form = writable({})
+  export let form = writable({})
+</script>
+```
 
+```svelte
+<script>
   // Element id of the form.
-  export let id /* = Randomly assigned ID. */
+  export let id = /* = Randomly assigned ID. */
 
   // Function for validating all fields. It accepts a field name to value
   // object and must return a field name to errors object.
@@ -230,16 +238,16 @@ $restProps are passed to the form element (outer component element).
   export let submit = null
 
   // See fields property.
-  setContext('p17-fields', ...)
+  setContext("p17-fields", ...)
 
   // See values property.
-  setContext('p17-values', ...)
+  setContext("p17-values", ...)
 
   // See errors property.
-  setContext('p17-errors', ...)
+  setContext("p17-errors", ...)
 
   // See form property.
-  setContext('p17-form', ...)
+  setContext("p17-form", ...)
 </script>
 
 <!-- Form fields, buttons, and anything else you fancy. -->
@@ -248,14 +256,11 @@ $restProps are passed to the form element (outer component element).
 
 ```svelte
 <Form
-  bind:fields={writable({})}
-  bind:values={writable({})}
-  bind:errors={writable({})}
-  bind:form={writable({})}
   id={/* = Randomly assigned ID. */}
   validate={null}
-  submit={null}>
-  <template />
+  submit={null}
+>
+  <div />
 </Form>
 ```
 ~~~
@@ -271,8 +276,7 @@ import p24 from 'p24'
 
 p24.parse({
   // Custom prefix for nodes.
-  // You could use "@" to parse "//@name: value" for example.
-  prefix: "p24.",
+  prefix: "@",
 
   // For SvelteKit packaged libraries you would use
   // "dist/*.svelte" or some variation of it.
@@ -313,7 +317,7 @@ With most arguments available:
 
 ```bash
 npx p24 \
-  --prefix "p24." \
+  --prefix "@" \
   --glob "**/*.svelte" \
   --template "README.template.md" \
   --output "README.md" \
@@ -324,7 +328,7 @@ Or:
 
 ```bash
 npx p24 \
-  -p "p24." \
+  -p "@" \
   -g "**/*.svelte" \
   -t "README.template.md" \
   -o "README.md" \
@@ -336,55 +340,3 @@ npx p24 \
 I simply wanted to document a component's API within itself and regenerate that documentation in a form I please, particularly within a README. To clarify, I want to document the **interface** (API) to the component by documenting its single implementation. Ths includes details such as: name, description, module & instance properties, slots, set context, and defaults where applicable.
 
 A few documentation tools come close but none completely satisfy my need for simplicity, readability, flexibility, ability to document all mentioned aspects of the API. Furthermore, existing tools traded-off too much flexibility for conciseness. So I set about creating **P24**. In the process I was able to separate the concern of parsing annotated comments into [**P23**](https://github.com/PaulioRandall/p23).
-
-## Fore Story
-
-There's plenty of room for improvement for a version 2. Here's a few ideas:
-
-**Remove some or all of the one letter aliases.** It was an attempt at conciseness that ruins readability when applied.
-
-**Use the elegant `@` tag syntax from [JS Doc](https://jsdoc.app/) to specify defaults for props and slots:**
-
-```js
-//P24.prop.let.label:
-// Text shown on the button.
-// @default "Submit"
-```
-
-**Use the `@` tag syntax for specifying all parts of the documentation:**
-
-```js
-//P24:
-// @prop
-// @let
-// @name label
-// @default "Submit"
-// Text shown on the button.
-```
-
-The above is too verbose but we can play with it. For example:
-
-```js
-//P24:
-// @prop.let: label
-// @default "Submit"
-// Text shown on the button.
-```
-
-Or possibly (requiring a breaking change to [**P23**](https://github.com/PaulioRandall/p23)):
-
-```js
-//P24:
-// @prop.let.label = "Submit"
-// Text shown on the button.
-```
-
-We are not constrained by historical standard character usage either. For example, this is also possible but not pleasant:
-
-```js
-//@: label
-// $prop
-// $$let
-// &"Submit"
-// Text shown on the button.
-```
