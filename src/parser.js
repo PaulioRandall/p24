@@ -1,4 +1,3 @@
-import { trim, clean } from './formatters.js'
 import StringBuilder from './StringBuilder.js'
 
 //@component
