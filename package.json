@@ -4,7 +4,7 @@
 	"description": "Simple tool for documenting Svelte components.",
 	"type": "module",
 	"license": "MIT",
-	"version": "0.21.0",
+	"version": "1.0.0",
 	"engines": {
 		"node": ">=18"
 	},
@@ -27,7 +27,7 @@
 	"scripts": {
 		"fmt": "prettier --log-level warn --write .",
 		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --passWithNoTests",
-		"commit": "npm run fmt && npm run test && cat ./scripts/ready-to-ship.txt"
+		"commit": "npm run fmt && npm run test && cat ./ready-to-ship.txt"
 	},
 	"devDependencies": {
 		"jest": "29.7.0",
