@@ -4,11 +4,11 @@
 
 # P24
 
-Simple tool for documenting Svelte components via P23.
+Simple tool for documenting Svelte components.
 
 ## Made to be Plundered
 
-Do whatever as long as you adhere to the permissive MIT license found within.
+Fork, pillage, and plunder! Do whatever as long as you adhere to the project's permissive MIT license.
 
 ## Functions
 
@@ -20,32 +20,28 @@ Given the component:
 <!--
   ArticlePreview.svelte
 
-  This comment is not parsed by P24. If a comment doesn't start with 'P24'
-  (case insensitive) then it's just a normal comment.
-
-  Some node path segments have concise aliases:
-  - m: module
-  - p: prop
-  - s: slot
-  - c: context
-  - ctx: context
-  - d: default
+  This comment is not parsed by P24. If a comment
+  doesn't start with '@' then it's just a normal
+  comment.
   
-  Name is inferred from the file name but may be specified as below.
+  Name is inferred from the file name but may be
+  specified as below.
 -->
 
 <!--@component ArticleListItem
-  To be slotted into either an `ArticleList` or `ArticleGrid` component. It
-  presents summary information about the article and a preview image.
-  clicking the component will take the user to the full article.
+  To be slotted into either an `ArticleList` or
+  `ArticleGrid` component. It presents summary
+  information about the article and a preview image.
+  clicking the component will take the user to the
+  full article.
 -->
 
 <script context="module">
   import { base } from '$app/paths'
 
   //@prop toFullPath
-  // Resolves a relative URL path to a full URL path by prepending the
-  // application root path.
+  // Resolves a relative URL path to a full URL path
+  // by prepending the application base path.
   // @module
   // @const
   export const toFullPath = (relPath) => {
@@ -69,19 +65,21 @@ Given the component:
   export let link
 
   //@prop published
-  // Date the article was published or falsy value if not yet published.
+  // Date the article was published or falsy value if
+  // not yet published.
   // @default null 
   export let published = null
 
   //@prop image
-  // URL of the preview image or falsy value to use the stock image.
-  // You may used the named slot 'image' if custom HTML is needed.
+  // URL of the preview image or falsy value to use
+  // the stock image. You may used the named slot
+  // 'image' if custom HTML is needed.
   // @default null
   export let image = null
 
   /*@ctx article-list-item
-    All details about the article including whether slotted image and summary
-    were provided.
+    All details about the article including whether
+    slotted image and summary were provided.
   */
   setContext('article-list-item', {
     title,
@@ -100,8 +98,9 @@ Given the component:
 
   {#if $$slots.image}
     <!--@slot image
-      Alternative to using the 'image' property if custom HTML is needed to
-      present the article preview thumbnail.
+      Alternative to using the 'image' property if
+      custom HTML is needed to present the article
+      preview thumbnail.
     -->
     <slot name="image" />
   {:else if image}
@@ -125,7 +124,7 @@ import p24 from 'p24'
 const fileDocs = p24.parse()
 ```
 
-Then `fileDocs` will be something like:
+Then `fileDocs` will be something similar to:
 
 ```js
 [
@@ -289,8 +288,8 @@ p24.parse({
   // The output file name.
   output: './README.md',
 
-  // The placeholder text in the template to swap for the parsed and rendered
-  // documentation. 
+  // The placeholder text in the template to swap
+  // for the parsed and rendered documentation. 
   placeholder: '{{PLACEHOLDER}}',
 })
 ```
@@ -337,6 +336,6 @@ npx p24 \
 
 ## Back Story
 
-I simply wanted to document a component's API within itself and regenerate that documentation in a form I please, particularly within a README. To clarify, I want to document the **interface** (API) to the component by documenting its single implementation. Ths includes details such as: name, description, module & instance properties, slots, set context, and defaults where applicable.
+I simply wanted to document a component's API within itself and regenerate that documentation in a form I please, particularly within a README. To clarify, I want to document the **interface** (API) to the component by documenting its single implementation. Ths includes details such as its name, description, module and instance properties, slots, set context, and defaults where applicable.
 
-A few documentation tools come close but none completely satisfy my need for simplicity, readability, flexibility, ability to document all mentioned aspects of the API. Furthermore, existing tools traded-off too much flexibility for conciseness. So I set about creating **P24**. In the process I was able to separate the concern of parsing annotated comments into [**P23**](https://github.com/PaulioRandall/p23).
+A few documentation tools come close but none completely satisfy my need for simplicity, readability, flexibility, and ability to document all mentioned aspects of the API. Furthermore, existing tools traded-off too much flexibility for conciseness. So I set about creating **P24**. In the process I was able to separate the concern of parsing annotated comments into [**P23**](https://github.com/PaulioRandall/p23).

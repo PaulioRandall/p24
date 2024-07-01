@@ -94,8 +94,8 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard',
 					'</script>',
 					'```'
 				)
@@ -124,8 +124,8 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport const wizard',
+					"  // A wizard's staff has a knob on the end.",
+					'  export const wizard',
 					'</script>',
 					'```'
 				)
@@ -154,8 +154,8 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script context="module">',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard',
 					'</script>',
 					'```'
 				)
@@ -184,8 +184,8 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard = "value"',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard = "value"',
 					'</script>',
 					'```'
 				)
@@ -222,11 +222,11 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard_a',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard_a',
 					'',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard_b',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard_b',
 					'</script>',
 					'```'
 				)
@@ -263,15 +263,15 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script context="module">',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard_a',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard_a',
 					'</script>',
 					'```',
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard_b',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard_b',
 					'</script>',
 					'```'
 				)
@@ -298,8 +298,8 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\tsetContext("wizard", ...)',
+					"  // A wizard's staff has a knob on the end.",
+					'  setContext("wizard", ...)',
 					'</script>',
 					'```'
 				)
@@ -328,11 +328,11 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\tsetContext("wizard_a", ...)',
+					"  // A wizard's staff has a knob on the end.",
+					'  setContext("wizard_a", ...)',
 					'',
-					"\t// A wizard's staff has a knob on the end.",
-					'\tsetContext("wizard_b", ...)',
+					"  // A wizard's staff has a knob on the end.",
+					'  setContext("wizard_b", ...)',
 					'</script>',
 					'```'
 				)
@@ -440,8 +440,8 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\tdispatch("wizard", {})',
+					"  // A wizard's staff has a knob on the end.",
+					'  dispatch("wizard", {})',
 					'</script>',
 					'```'
 				)
@@ -493,14 +493,14 @@ describe('stringify.js', () => {
 					'',
 					'```svelte',
 					'<script>',
-					"\t// A wizard's staff has a knob on the end.",
-					'\texport let wizard',
+					"  // A wizard's staff has a knob on the end.",
+					'  export let wizard',
 					'',
-					"\t// A wizard's staff has a knob on the end.",
-					'\tsetContext("wizard", ...)',
+					"  // A wizard's staff has a knob on the end.",
+					'  setContext("wizard", ...)',
 					'',
-					"\t// A wizard's staff has a knob on the end.",
-					'\tdispatch("wizard", {})',
+					"  // A wizard's staff has a knob on the end.",
+					'  dispatch("wizard", {})',
 					'</script>',
 					'',
 					"<!-- A wizard's staff has a knob on the end. -->",
@@ -571,10 +571,10 @@ describe('stringify.js', () => {
 			const exp = lines(
 				'```svelte',
 				'<Component',
-				'\twizard',
-				'\twitch="hag"',
-				'\twarlord={69}',
-				'\tbind:warlock',
+				'  wizard',
+				'  witch="hag"',
+				'  warlord={69}',
+				'  bind:warlock',
 				'/>',
 				'```'
 			)
@@ -605,9 +605,9 @@ describe('stringify.js', () => {
 			const exp = lines(
 				'```svelte',
 				'<Component>',
-				'\t<div />',
-				'\t<div slot="wizard" />',
-				'\t<div slot="witch" />',
+				'  <div />',
+				'  <div slot="wizard" />',
+				'  <div slot="witch" />',
 				'</Component>',
 				'```'
 			)

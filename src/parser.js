@@ -1,16 +1,5 @@
 import StringBuilder from './StringBuilder.js'
 
-//@component
-//@prop
-//@slot
-//@ctx
-//@on
-
-//@name
-//@module
-//@alias
-//@default
-
 export default (data) => {
 	const result = {}
 

@@ -1,10 +1,10 @@
 {
 	"author": "Paul Williams",
 	"name": "p24",
-	"description": "Simple tool for documenting Svelte components via P23.",
+	"description": "Simple tool for documenting Svelte components.",
 	"type": "module",
 	"license": "MIT",
-	"version": "0.20.0",
+	"version": "0.21.0",
 	"engines": {
 		"node": ">=18"
 	},
@@ -15,8 +15,7 @@
 	"keywords": [
 		"documentation",
 		"svelte",
-		"plunder",
-		"metadata"
+		"plunder"
 	],
 	"exports": {
 		"./package.json": "./package.json",
@@ -36,7 +35,7 @@
 		"upath": "2.0.1"
 	},
 	"dependencies": {
-		"p23": "^0.13.0",
+		"p23": "^1.0.1",
 		"commander": "^12.1.0"
 	}
 }

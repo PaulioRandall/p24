@@ -140,7 +140,7 @@ const mdAppendProps = (sb, props) => {
 const mdAppendProp = (sb, prop) => {
 	appendJsComment(sb, prop.description)
 
-	sb.append('\texport ')
+	sb.append('  export ')
 	sb.append(prop.const ? 'const' : 'let')
 	sb.append(' ')
 	sb.append(prop.name)
@@ -164,7 +164,7 @@ const mdAppendContexts = (sb, ctxs) => {
 const mdAppendContext = (sb, ctx) => {
 	appendJsComment(sb, ctx.description)
 
-	sb.append('\tsetContext("')
+	sb.append('  setContext("')
 	sb.append(ctx.name)
 	sb.line('", ...)')
 }
@@ -202,7 +202,7 @@ const mdAppendEvents = (sb, events) => {
 const mdAppendEvent = (sb, event) => {
 	appendJsComment(sb, event.description)
 
-	sb.append('\tdispatch("')
+	sb.append('  dispatch("')
 	sb.append(event.name)
 	sb.line('", {})')
 }
@@ -211,7 +211,7 @@ const appendJsComment = (sb, comment) => {
 	comment = comment.replace(/\r/g, '')
 
 	for (const line of comment.split('\n')) {
-		sb.line('\t// ' + line)
+		sb.line('  // ' + line)
 	}
 }
 
@@ -225,7 +225,7 @@ const appendHtmlComment = (sb, comment) => {
 
 	sb.line('<!--')
 	for (const line of comment.split('\n')) {
-		sb.line('\t' + line)
+		sb.line('  ' + line)
 	}
 	sb.line('-->')
 }
@@ -272,7 +272,7 @@ const htmlAppendProps = (sb, props) => {
 }
 
 const htmlAppendProp = (sb, prop) => {
-	sb.append('\t')
+	sb.append('  ')
 
 	if (prop.const) {
 		sb.append('bind:')
@@ -300,7 +300,7 @@ const htmlAppendProp = (sb, prop) => {
 
 const htmlAppendSlots = (sb, slots) => {
 	for (const s of slots) {
-		sb.append('\t<div')
+		sb.append('  <div')
 
 		if (s.name !== 'default') {
 			sb.append(' slot="').append(s.name).append('"')
